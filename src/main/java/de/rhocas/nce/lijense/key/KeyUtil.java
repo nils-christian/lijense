@@ -24,6 +24,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 
+import de.rhocas.nce.lijense.io.IOUtil;
+
 /**
  * This is a util class to generate, save, and load private and public RSA keys for the usage within liJense.
  *
@@ -120,7 +122,7 @@ public final class KeyUtil {
 	 */
 	public static PrivateKey loadPrivateKeyFromStream( final InputStream aStream ) throws KeyException {
 		try {
-			final byte[] binaryContent = aStream.readAllBytes( );
+			final byte[] binaryContent = IOUtil.readAllBytes( aStream );
 			return loadPrivateKeyFromArray( binaryContent );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not load the key", ex );
@@ -188,7 +190,7 @@ public final class KeyUtil {
 	 */
 	public static PublicKey loadPublicKeyFromStream( final InputStream aStream ) throws KeyException {
 		try {
-			final byte[] binaryContent = aStream.readAllBytes( );
+			final byte[] binaryContent = IOUtil.readAllBytes( aStream );
 			return loadPublicKeyFromArray( binaryContent );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not load the key", ex );

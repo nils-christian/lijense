@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.security.InvalidKeyException;
@@ -23,6 +25,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import de.rhocas.nce.lijense.Constants;
+import de.rhocas.nce.lijense.io.IOUtil;
 import de.rhocas.nce.lijense.key.KeyException;
 import de.rhocas.nce.lijense.key.KeyUtil;
 
@@ -137,6 +140,35 @@ public class LicenseUtil {
 	 */
 	public static UnmodifiableLicense loadLicenseFile( final PublicKey aPublicKey, final File aFile, final Optional<byte[]> aFingerprint ) throws LicenseException {
 		try {
+			return loadLicenseFileFromInputStream( aPublicKey, new FileInputStream( aFile ), aFingerprint );
+		} catch ( final FileNotFoundException ex ) {
+			throw new LicenseException( "Could not load the license", ex );
+		}
+	}
+
+	/**
+	 * This method loads the license from the given input stream and verifies the digital signature with the public key. Optionally, one can also verify the
+	 * public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment. The stream is closed afterwards.
+	 *
+	 * @param aPublicKey
+	 *            The public key, which is used to check the digital signature.
+	 * @param aStream
+	 *            The input stream.
+	 * @param aFingerprint
+	 *            The expected fingerprint of the public key.
+	 *
+	 * @return The license content.
+	 *
+	 * @throws LicenseException
+	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment, that
+	 *             an IO error occurred, that the actual fingerprint of the public key does not match the expected fingerprint or that the digital signature of
+	 *             the license file is not valid.
+	 *
+	 * @since 1.0.0
+	 */
+	public static UnmodifiableLicense loadLicenseFileFromInputStream( final PublicKey aPublicKey, final InputStream aStream, final Optional<byte[]> aFingerprint )
+			throws LicenseException {
+		try {
 			// Check the fingerprint of the public key - if necessary
 			if ( aFingerprint.isPresent( ) ) {
 				if ( !KeyUtil.isFingerprintValid( aPublicKey, aFingerprint.get( ) ) ) {
@@ -148,13 +180,13 @@ public class LicenseUtil {
 			final byte[] binaryLicense;
 			final byte[] binarySignature;
 
-			try ( final ZipInputStream zipInputStream = new ZipInputStream( new FileInputStream( aFile ) ) ) {
+			try ( final ZipInputStream zipInputStream = new ZipInputStream( aStream ) ) {
 				zipInputStream.getNextEntry( );
-				binaryLicense = zipInputStream.readAllBytes( );
+				binaryLicense = IOUtil.readAllBytes( zipInputStream );
 				zipInputStream.closeEntry( );
 
 				zipInputStream.getNextEntry( );
-				binarySignature = zipInputStream.readAllBytes( );
+				binarySignature = IOUtil.readAllBytes( zipInputStream );
 				zipInputStream.closeEntry( );
 			}
 
