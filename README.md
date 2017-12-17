@@ -16,7 +16,7 @@ Please note that I am not a security expert. I provide you with this library wit
 		LicenseUtil.saveLicenseFile( modifiableLicense, privateKey, new File( "myLicense.dat" ) );
 
 		// Load and verify the license file (without fingerprint for the public key)
-		final UnmodifiableLicense unmodifiableLicense = LicenseUtil.loadLicenseFile( publicKey, new File( "myLicense.dat" ), Optional.empty( ) );
+		final UnmodifiableLicense unmodifiableLicense = LicenseUtil.loadLicenseFile( publicKey, new File( "myLicense.dat" ), Optional.<byte[]>empty( ) );
 		System.out.println( unmodifiableLicense.getValue( "myFeature.active" ) );
 
 ## How does it work?

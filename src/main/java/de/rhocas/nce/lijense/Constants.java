@@ -37,6 +37,20 @@ public final class Constants {
 	 */
 	public static final String FINGERPRINT_ALGORITHM = "SHA-512";
 
+	/**
+	 * This is the algorithm used for the digital signature. This is currently SHA-512 with a RSA key.
+	 *
+	 * @since 1.0.0
+	 */
+	public static final String SIGNATURE_ALGORITHM = "SHA512withRSA";
+
+	/**
+	 * This is the encoding of the internal properties file. This is currently UTF-8.
+	 *
+	 * @since 1.0.0
+	 */
+	public static final String LICENSE_ENCODING = "UTF-8";
+
 	private Constants( ) {
 		// Avoid instantiation
 	}
