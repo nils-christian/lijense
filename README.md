@@ -4,6 +4,21 @@ liJense is a small open-source framework to use licenses in your Java applicatio
 
 Please note that I am not a security expert. I provide you with this library without any liability. If you are a security expert and see any design or implementation flaws, please do not hesitate to contact me.
 
+## How do I use it?
+		// Generate a new key pair
+		final KeyPair keyPair = KeyUtil.generateNewKeyPair( );
+		final PrivateKey privateKey = keyPair.getPrivate( );
+		final PublicKey publicKey = keyPair.getPublic( );
+
+		// Create and sign the license file
+		final ModifiableLicense modifiableLicense = new ModifiableLicense( );
+		modifiableLicense.setProperty( "myFeature.active", "true" );
+		LicenseUtil.saveLicenseFile( modifiableLicense, privateKey, new File( "myLicense.dat" ) );
+
+		// Load and verify the license file (without fingerprint for the public key)
+		final UnmodifiableLicense unmodifiableLicense = LicenseUtil.loadLicenseFile( publicKey, new File( "myLicense.dat" ), Optional.empty( ) );
+		System.out.println( unmodifiableLicense.getValue( "myFeature.active" ) );
+
 ## How does it work?
 
 A license file within liJense is basically an archive file containing two files. The first one is a common Java properties file - a file containing arbitrary key/value-pairs. The second file is the signature file for the properties file. While creating such a license file, liJense generates this signature with a 4096 bit strong private RSA key. The validity of the signature can later be checked in your application by using the corresponding public RSA key (which is shipped with your application). If the signature is not valid, the license file has been tampered with. In order to avoid that the public key in your application is simply replaced, the fingerprint of the public key can also be checked in the source code (which is the SHA-512 hash of the public key). 
