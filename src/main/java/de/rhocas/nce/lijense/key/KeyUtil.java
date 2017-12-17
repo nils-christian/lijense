@@ -6,6 +6,7 @@ import static de.rhocas.nce.lijense.Constants.RANDOM_ALGORITHM;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.security.Key;
@@ -14,9 +15,11 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 /**
  * This is a util class to generate, save, and load private and public RSA keys
@@ -106,6 +109,31 @@ public final class KeyUtil {
 	}
 
 	/**
+	 * This method loads a private key from the given stream. The stream is not
+	 * closed.
+	 *
+	 * @param aStream
+	 *            The stream which contains the private key.
+	 *
+	 * @return The private key in the stream.
+	 *
+	 * @throws KeyException
+	 *             If something went wrong while loading the key. This usually
+	 *             indicates an IO error or that the given stream contains no valid
+	 *             private key.
+	 *
+	 * @since 1.0.0
+	 */
+	public static PrivateKey loadPrivateKeyFromStream(final InputStream aStream) throws KeyException {
+		try {
+			final byte[] binaryContent = aStream.readAllBytes();
+			return loadPrivateKeyFromArray(binaryContent);
+		} catch (final IOException ex) {
+			throw new KeyException("Could not load the key", ex);
+		}
+	}
+
+	/**
 	 * This method loads a private key from the given array.
 	 *
 	 * @param aArray
@@ -119,12 +147,86 @@ public final class KeyUtil {
 	 *
 	 * @since 1.0.0
 	 */
-	private static PrivateKey loadPrivateKeyFromArray(final byte[] aArray) throws KeyException {
+	public static PrivateKey loadPrivateKeyFromArray(final byte[] aArray) throws KeyException {
 		try {
 			final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(aArray);
 			final KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
 
 			return keyFactory.generatePrivate(keySpec);
+		} catch (final NoSuchAlgorithmException | InvalidKeySpecException ex) {
+			throw new KeyException("Could not load the key", ex);
+		}
+	}
+
+	/**
+	 * This method loads a public key from the given binary file.
+	 *
+	 * @param aFile
+	 *            The file which contains the public key.
+	 *
+	 * @return The public key in the file.
+	 *
+	 * @throws KeyException
+	 *             If something went wrong while loading the key. This usually
+	 *             indicates an IO error or that the given file contains no valid
+	 *             public key.
+	 *
+	 * @since 1.0.0
+	 */
+	public static PublicKey loadPublicKeyFromFile(final File aFile) throws KeyException {
+		try {
+			final byte[] binaryContent = Files.readAllBytes(aFile.toPath());
+			return loadPublicKeyFromArray(binaryContent);
+		} catch (final IOException ex) {
+			throw new KeyException("Could not load the key", ex);
+		}
+	}
+
+	/**
+	 * This method loads a public key from the given stream. The stream is not
+	 * closed.
+	 *
+	 * @param aStream
+	 *            The stream which contains the public key.
+	 *
+	 * @return The public key in the stream.
+	 *
+	 * @throws KeyException
+	 *             If something went wrong while loading the key. This usually
+	 *             indicates an IO error or that the given stream contains no valid
+	 *             public key.
+	 *
+	 * @since 1.0.0
+	 */
+	public static PublicKey loadPublicKeyFromStream(final InputStream aStream) throws KeyException {
+		try {
+			final byte[] binaryContent = aStream.readAllBytes();
+			return loadPublicKeyFromArray(binaryContent);
+		} catch (final IOException ex) {
+			throw new KeyException("Could not load the key", ex);
+		}
+	}
+
+	/**
+	 * This method loads a public key from the given array.
+	 *
+	 * @param aArray
+	 *            The array which contains the public key.
+	 *
+	 * @return The public key in the array.
+	 *
+	 * @throws KeyException
+	 *             If something went wrong while loading the key. This usually
+	 *             indicates that the given array contains no valid public key.
+	 *
+	 * @since 1.0.0
+	 */
+	public static PublicKey loadPublicKeyFromArray(final byte[] aArray) throws KeyException {
+		try {
+			final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(aArray);
+			final KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+
+			return keyFactory.generatePublic(keySpec);
 		} catch (final NoSuchAlgorithmException | InvalidKeySpecException ex) {
 			throw new KeyException("Could not load the key", ex);
 		}
