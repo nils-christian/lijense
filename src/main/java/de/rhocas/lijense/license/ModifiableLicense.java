@@ -1,3 +1,29 @@
+////////////////////////////////////////////////////////////////////////////////////
+//                                                                                //
+// MIT License                                                                    //
+//                                                                                //
+// Copyright (c) 2017 Nils Christian Ehmke                                        //
+//                                                                                //
+// Permission is hereby granted, free of charge, to any person obtaining a copy   //
+// of this software and associated documentation files (the "Software"), to deal  //
+// in the Software without restriction, including without limitation the rights   //
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell      //
+// copies of the Software, and to permit persons to whom the Software is          //
+// furnished to do so, subject to the following conditions:                       //
+//                                                                                //
+// The above copyright notice and this permission notice shall be included in all //
+// copies or substantial portions of the Software.                                //
+//                                                                                //
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR     //
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,       //
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE    //
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER         //
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  //
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  //
+// SOFTWARE.                                                                      //
+//                                                                                //
+////////////////////////////////////////////////////////////////////////////////////
+
 package de.rhocas.lijense.license;
 
 import static de.rhocas.lijense.Constants.DATE_FORMAT;
@@ -38,7 +64,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final byte aValue ) {
@@ -52,7 +78,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final short aValue ) {
@@ -66,7 +92,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final int aValue ) {
@@ -80,7 +106,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final long aValue ) {
@@ -94,7 +120,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final float aValue ) {
@@ -108,7 +134,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final double aValue ) {
@@ -122,7 +148,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final char aValue ) {
@@ -136,7 +162,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final boolean aValue ) {
@@ -150,7 +176,7 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final Date aValue ) {
@@ -169,7 +195,7 @@ public final class ModifiableLicense extends Properties {
 	 *
 	 * @param aDate
 	 *            The expiration date.
-	 * 
+	 *
 	 * @since 1.0.0
 	 */
 	public void setExpirationDate( final Date aDate ) {
