@@ -1,5 +1,8 @@
 package de.rhocas.nce.lijense;
 
+import java.text.DateFormat;
+import java.util.Locale;
+
 /**
  * This class contains all constants used throughout the liJense framework.
  *
@@ -50,6 +53,20 @@ public final class Constants {
 	 * @since 1.0.0
 	 */
 	public static final String LICENSE_ENCODING = "UTF-8";
+
+	/**
+	 * This is the date format used to encode and parse dates in the license file.
+	 *
+	 * @since 1.0.0
+	 */
+	public static final DateFormat DATE_FORMAT = DateFormat.getDateInstance( DateFormat.LONG, Locale.ENGLISH );
+
+	/**
+	 * This is the key for the expiration date in the license file.
+	 *
+	 * @since 1.0.0
+	 */
+	public static final String LICENSE_KEY_EXPIRATION_DATE = "_EXPIRATION_DATE";
 
 	private Constants( ) {
 		// Avoid instantiation
