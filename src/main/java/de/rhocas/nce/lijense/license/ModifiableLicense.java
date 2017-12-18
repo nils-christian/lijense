@@ -24,6 +24,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 *
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final String aValue ) {
 		setProperty( aKey, aValue );
@@ -36,6 +38,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final byte aValue ) {
 		setValue( aKey, Byte.toString( aValue ) );
@@ -48,6 +52,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final short aValue ) {
 		setValue( aKey, Short.toString( aValue ) );
@@ -60,6 +66,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final int aValue ) {
 		setValue( aKey, Integer.toString( aValue ) );
@@ -72,6 +80,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final long aValue ) {
 		setValue( aKey, Long.toString( aValue ) );
@@ -84,6 +94,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final float aValue ) {
 		setValue( aKey, Float.toString( aValue ) );
@@ -96,6 +108,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final double aValue ) {
 		setValue( aKey, Double.toString( aValue ) );
@@ -108,6 +122,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final char aValue ) {
 		setValue( aKey, Character.toString( aValue ) );
@@ -120,6 +136,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final boolean aValue ) {
 		setValue( aKey, Boolean.toString( aValue ) );
@@ -132,6 +150,8 @@ public final class ModifiableLicense extends Properties {
 	 *            The key.
 	 * @param aValue
 	 *            The value.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final Date aValue ) {
 		final String value;
@@ -149,6 +169,8 @@ public final class ModifiableLicense extends Properties {
 	 *
 	 * @param aDate
 	 *            The expiration date.
+	 * 
+	 * @since 1.0.0
 	 */
 	public void setExpirationDate( final Date aDate ) {
 		setValue( LICENSE_KEY_EXPIRATION_DATE, aDate );

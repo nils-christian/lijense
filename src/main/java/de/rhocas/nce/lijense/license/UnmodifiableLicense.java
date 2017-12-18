@@ -25,6 +25,8 @@ public final class UnmodifiableLicense {
 	 *
 	 * @param aInternalMap
 	 *            The mapping used within this license. The map is copied and made unmodifiable. A deep copy is not performed.
+	 * 
+	 * @since 1.0.0
 	 */
 	public UnmodifiableLicense( final Map<String, String> aInternalMap ) {
 		// Copy the given map and make it immutable
@@ -39,6 +41,8 @@ public final class UnmodifiableLicense {
 	 *            The key.
 	 *
 	 * @return The value for the key.
+	 *
+	 * @since 1.0.0
 	 */
 	public String getValue( final String aKey ) {
 		return ivInternalMap.get( aKey );
@@ -52,6 +56,8 @@ public final class UnmodifiableLicense {
 	 *            The key.
 	 *
 	 * @return true if and only if the given feature is active.
+	 *
+	 * @since 1.0.0
 	 */
 	public boolean isFeatureActive( final String aKey ) {
 		final String value = getValue( aKey );
@@ -72,6 +78,8 @@ public final class UnmodifiableLicense {
 	 *            The default value.
 	 *
 	 * @return The value for the key or the default value.
+	 *
+	 * @since 1.0.0
 	 */
 	public int getValueAsInt( final String aKey, final int aDefault ) {
 		final String value = getValue( aKey );
@@ -96,6 +104,8 @@ public final class UnmodifiableLicense {
 	 *
 	 * @throws ParseException
 	 *             If the date could not be parsed.
+	 * 
+	 * @since 1.0.0
 	 */
 	public Date getValueAsDate( final String aKey, final Date aDefault ) throws ParseException {
 		final String value = getValue( aKey );
@@ -115,6 +125,8 @@ public final class UnmodifiableLicense {
 	 *
 	 * @throws ParseException
 	 *             If the date could not be parsed.
+	 * 
+	 * @since 1.0.0
 	 */
 	public boolean isExpired( ) throws ParseException {
 		final Date expirationDate = getValueAsDate( LICENSE_KEY_EXPIRATION_DATE, null );
