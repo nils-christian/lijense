@@ -57,12 +57,24 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueByteDefault( ) {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsByte( "key", (byte) 1 ), is( (byte) 1 ) );
+	}
+
+	@Test
 	public void testGetValueShort( ) {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "42" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		assertThat( license.getValueAsShort( "key", (short) 0 ), is( (short) 42 ) );
+	}
+
+	@Test
+	public void testGetValueShortDefault( ) {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsShort( "key", (short) 1 ), is( (short) 1 ) );
 	}
 
 	@Test
@@ -75,12 +87,24 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueIntDefault( ) {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsInt( "key", 1 ), is( 1 ) );
+	}
+
+	@Test
 	public void testGetValueLong( ) {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "42" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		assertThat( license.getValueAsLong( "key", 0L ), is( 42L ) );
+	}
+
+	@Test
+	public void testGetValueLongDefault( ) {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsLong( "key", 1L ), is( 1L ) );
 	}
 
 	@Test
@@ -93,12 +117,24 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueFloatDefault( ) {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsFloat( "key", 1.0f ), is( 1.0f ) );
+	}
+
+	@Test
 	public void testGetValueDouble( ) {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "42.0" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		assertThat( license.getValueAsDouble( "key", 0.0 ), is( 42.0 ) );
+	}
+
+	@Test
+	public void testGetValueDoubleDefault( ) {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsDouble( "key", 1.0 ), is( 1.0 ) );
 	}
 
 	@Test
@@ -111,12 +147,24 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueBooleanDefault( ) {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsBoolean( "key", true ), is( true ) );
+	}
+
+	@Test
 	public void testGetValueChar( ) {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "A" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		assertThat( license.getValueAsChar( "key", 'B' ), is( 'A' ) );
+	}
+
+	@Test
+	public void testGetValueCharDefault( ) {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsChar( "key", 'B' ), is( 'B' ) );
 	}
 
 	@Test
@@ -127,6 +175,22 @@ public class UnmodifiableLicenseTest {
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		final Date date = license.getValueAsDate( "key", null );
+
+		assertThat( date.getYear( ), is( 2000 - 1900 ) );
+		assertThat( date.getMonth( ), is( 12 - 1 ) );
+		assertThat( date.getDate( ), is( 1 ) );
+	}
+
+	@Test
+	@SuppressWarnings ( "deprecation" )
+	public void testGetValueDateDefault( ) throws ParseException {
+		final Date defaultDate = new Date( );
+		defaultDate.setYear( 2000 - 1900 );
+		defaultDate.setMonth( 12 - 1 );
+		defaultDate.setDate( 1 );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		final Date date = license.getValueAsDate( "key", defaultDate );
 
 		assertThat( date.getYear( ), is( 2000 - 1900 ) );
 		assertThat( date.getMonth( ), is( 12 - 1 ) );
