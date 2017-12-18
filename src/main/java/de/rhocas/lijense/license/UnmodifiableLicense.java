@@ -30,8 +30,10 @@ import static de.rhocas.lijense.Constants.DATE_FORMAT;
 import static de.rhocas.lijense.Constants.LICENSE_KEY_EXPIRATION_DATE;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,6 +97,52 @@ public final class UnmodifiableLicense {
 	}
 
 	/**
+	 * Returns the value for the given key as byte. If the key is not available or the value is {@code null} or empty, the given default value will be returned
+	 * instead.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aDefault
+	 *            The default value.
+	 *
+	 * @return The value for the key or the default value.
+	 *
+	 * @since 1.0.0
+	 */
+	public byte getValueAsByte( final String aKey, final byte aDefault ) {
+		final String value = getValue( aKey );
+
+		if ( value != null && !value.isEmpty( ) ) {
+			return Byte.valueOf( value );
+		} else {
+			return aDefault;
+		}
+	}
+
+	/**
+	 * Returns the value for the given key as short. If the key is not available or the value is {@code null} or empty, the given default value will be returned
+	 * instead.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aDefault
+	 *            The default value.
+	 *
+	 * @return The value for the key or the default value.
+	 *
+	 * @since 1.0.0
+	 */
+	public short getValueAsShort( final String aKey, final short aDefault ) {
+		final String value = getValue( aKey );
+
+		if ( value != null && !value.isEmpty( ) ) {
+			return Short.valueOf( value );
+		} else {
+			return aDefault;
+		}
+	}
+
+	/**
 	 * Returns the value for the given key as integer. If the key is not available or the value is {@code null} or empty, the given default value will be
 	 * returned instead.
 	 *
@@ -112,6 +160,121 @@ public final class UnmodifiableLicense {
 
 		if ( value != null && !value.isEmpty( ) ) {
 			return Integer.valueOf( value );
+		} else {
+			return aDefault;
+		}
+	}
+
+	/**
+	 * Returns the value for the given key as long. If the key is not available or the value is {@code null} or empty, the given default value will be returned
+	 * instead.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aDefault
+	 *            The default value.
+	 *
+	 * @return The value for the key or the default value.
+	 *
+	 * @since 1.0.0
+	 */
+	public long getValueAsLong( final String aKey, final long aDefault ) {
+		final String value = getValue( aKey );
+
+		if ( value != null && !value.isEmpty( ) ) {
+			return Long.valueOf( value );
+		} else {
+			return aDefault;
+		}
+	}
+
+	/**
+	 * Returns the value for the given key as float. If the key is not available or the value is {@code null} or empty, the given default value will be returned
+	 * instead.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aDefault
+	 *            The default value.
+	 *
+	 * @return The value for the key or the default value.
+	 *
+	 * @since 1.0.0
+	 */
+	public float getValueAsFloat( final String aKey, final float aDefault ) {
+		final String value = getValue( aKey );
+
+		if ( value != null && !value.isEmpty( ) ) {
+			return Float.valueOf( value );
+		} else {
+			return aDefault;
+		}
+	}
+
+	/**
+	 * Returns the value for the given key as double. If the key is not available or the value is {@code null} or empty, the given default value will be
+	 * returned instead.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aDefault
+	 *            The default value.
+	 *
+	 * @return The value for the key or the default value.
+	 *
+	 * @since 1.0.0
+	 */
+	public double getValueAsDouble( final String aKey, final double aDefault ) {
+		final String value = getValue( aKey );
+
+		if ( value != null && !value.isEmpty( ) ) {
+			return Double.valueOf( value );
+		} else {
+			return aDefault;
+		}
+	}
+
+	/**
+	 * Returns the value for the given key as boolean. If the key is not available or the value is {@code null} or empty, the given default value will be
+	 * returned instead.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aDefault
+	 *            The default value.
+	 *
+	 * @return The value for the key or the default value.
+	 *
+	 * @since 1.0.0
+	 */
+	public boolean getValueAsBoolean( final String aKey, final boolean aDefault ) {
+		final String value = getValue( aKey );
+
+		if ( value != null && !value.isEmpty( ) ) {
+			return Boolean.valueOf( value );
+		} else {
+			return aDefault;
+		}
+	}
+
+	/**
+	 * Returns the value for the given key as char. If the key is not available or the value is {@code null} or empty, the given default value will be returned
+	 * instead.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aDefault
+	 *            The default value.
+	 *
+	 * @return The value for the key or the default value.
+	 *
+	 * @since 1.0.0
+	 */
+	public char getValueAsChar( final String aKey, final char aDefault ) {
+		final String value = getValue( aKey );
+
+		if ( value != null && !value.isEmpty( ) ) {
+			return value.charAt( 0 );
 		} else {
 			return aDefault;
 		}
@@ -158,13 +321,27 @@ public final class UnmodifiableLicense {
 		final Date expirationDate = getValueAsDate( LICENSE_KEY_EXPIRATION_DATE, null );
 
 		if ( expirationDate != null ) {
-			final Date now = new Date( );
-			if ( now.after( expirationDate ) ) {
+			// Make sure that we ignore the time when we compare the dates
+			final GregorianCalendar expiration = new GregorianCalendar( );
+			expiration.setTime( expirationDate );
+			clearTimeFromCalendar( expiration );
+
+			final GregorianCalendar now = new GregorianCalendar( );
+			clearTimeFromCalendar( now );
+
+			if ( now.after( expiration ) ) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	private void clearTimeFromCalendar( final GregorianCalendar aCalendar ) {
+		aCalendar.set( Calendar.HOUR_OF_DAY, 0 );
+		aCalendar.set( Calendar.MINUTE, 0 );
+		aCalendar.set( Calendar.SECOND, 0 );
+		aCalendar.set( Calendar.MILLISECOND, 0 );
 	}
 
 }
