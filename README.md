@@ -5,6 +5,16 @@ liJense is a small open-source framework to use licenses in your Java applicatio
 Please note that I am not a security expert. I provide you with this library without any liability. If you are a security expert and see any design or implementation flaws, please do not hesitate to contact me.
 
 ## How do I use it?
+In order to use liJense in your project, simply add the Maven dependency to your pom.xml.
+
+	<dependency>
+		<groupId>de.rhocas.lijense</groupId>
+		<artifactId>lijense</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</dependency>
+
+The following snippet shows a simple example. It creates a new RSA key pair, creates a license file and loads it afterwards.
+
 		// Generate a new key pair
 		final KeyPair keyPair = KeyUtil.generateNewKeyPair( );
 		final PrivateKey privateKey = keyPair.getPrivate( );
