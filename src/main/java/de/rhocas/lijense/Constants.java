@@ -1,6 +1,7 @@
 package de.rhocas.lijense;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
@@ -59,7 +60,7 @@ public final class Constants {
 	 *
 	 * @since 1.0.0
 	 */
-	public static final DateFormat DATE_FORMAT = DateFormat.getDateInstance( DateFormat.LONG, Locale.ENGLISH );
+	public static final DateFormat DATE_FORMAT = new SimpleDateFormat( "yyyy-MM-dd", Locale.ENGLISH );
 
 	/**
 	 * This is the key for the expiration date in the license file.

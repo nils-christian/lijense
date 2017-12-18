@@ -1,4 +1,4 @@
-package de.rhocas.lijense.key;
+package de.rhocas.lijense.license;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -18,17 +18,14 @@ import org.junit.rules.TemporaryFolder;
 
 import de.rhocas.lijense.key.KeyException;
 import de.rhocas.lijense.key.KeyUtil;
-import de.rhocas.lijense.license.LicenseException;
-import de.rhocas.lijense.license.LicenseUtil;
-import de.rhocas.lijense.license.ModifiableLicense;
-import de.rhocas.lijense.license.UnmodifiableLicense;
+import de.rhocas.lijense.key.KeyUtilTest;
 
 /**
  * Unit test for {@link LicenseUtil}.
  *
  * @author Nils Christian Ehmke
  */
-public class LicenseUtilTest {
+public final class LicenseUtilTest {
 
 	@Rule
 	public TemporaryFolder ivTemporaryFolder = new TemporaryFolder( );
