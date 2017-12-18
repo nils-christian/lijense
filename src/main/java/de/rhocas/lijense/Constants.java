@@ -1,4 +1,4 @@
-package de.rhocas.nce.lijense;
+package de.rhocas.lijense;
 
 import java.text.DateFormat;
 import java.util.Locale;

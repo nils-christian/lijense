@@ -1,7 +1,7 @@
-package de.rhocas.nce.lijense.license;
+package de.rhocas.lijense.license;
 
-import static de.rhocas.nce.lijense.Constants.DATE_FORMAT;
-import static de.rhocas.nce.lijense.Constants.LICENSE_KEY_EXPIRATION_DATE;
+import static de.rhocas.lijense.Constants.DATE_FORMAT;
+import static de.rhocas.lijense.Constants.LICENSE_KEY_EXPIRATION_DATE;
 
 import java.text.ParseException;
 import java.util.Collections;

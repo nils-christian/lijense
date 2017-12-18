@@ -1,4 +1,4 @@
-package de.rhocas.nce.lijense.license;
+package de.rhocas.lijense.license;
 
 /**
  * This exception indicates that something went wrong while generating, saving, or loading a license.

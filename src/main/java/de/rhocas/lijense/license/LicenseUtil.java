@@ -1,4 +1,4 @@
-package de.rhocas.nce.lijense.license;
+package de.rhocas.lijense.license;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -24,10 +24,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import de.rhocas.nce.lijense.Constants;
-import de.rhocas.nce.lijense.io.IOUtil;
-import de.rhocas.nce.lijense.key.KeyException;
-import de.rhocas.nce.lijense.key.KeyUtil;
+import de.rhocas.lijense.Constants;
+import de.rhocas.lijense.io.IOUtil;
+import de.rhocas.lijense.key.KeyException;
+import de.rhocas.lijense.key.KeyUtil;
 
 /**
  * This is a util class to save and load license files within liJense.

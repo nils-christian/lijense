@@ -1,4 +1,4 @@
-package de.rhocas.nce.lijense.io;
+package de.rhocas.lijense.io;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

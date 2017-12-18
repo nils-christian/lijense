@@ -1,4 +1,4 @@
-package de.rhocas.nce.lijense.key;
+package de.rhocas.lijense.key;
 
 /**
  * This exception indicates that something went wrong while generating, saving, or loading a key.

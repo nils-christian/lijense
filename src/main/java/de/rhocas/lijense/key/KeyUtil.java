@@ -1,9 +1,9 @@
-package de.rhocas.nce.lijense.key;
+package de.rhocas.lijense.key;
 
-import static de.rhocas.nce.lijense.Constants.FINGERPRINT_ALGORITHM;
-import static de.rhocas.nce.lijense.Constants.KEY_ALGORITHM;
-import static de.rhocas.nce.lijense.Constants.KEY_SIZE;
-import static de.rhocas.nce.lijense.Constants.RANDOM_ALGORITHM;
+import static de.rhocas.lijense.Constants.FINGERPRINT_ALGORITHM;
+import static de.rhocas.lijense.Constants.KEY_ALGORITHM;
+import static de.rhocas.lijense.Constants.KEY_SIZE;
+import static de.rhocas.lijense.Constants.RANDOM_ALGORITHM;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 
-import de.rhocas.nce.lijense.io.IOUtil;
+import de.rhocas.lijense.io.IOUtil;
 
 /**
  * This is a util class to generate, save, and load private and public RSA keys for the usage within liJense.

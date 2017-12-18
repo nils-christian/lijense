@@ -1,4 +1,4 @@
-package de.rhocas.nce.lijense.key;
+package de.rhocas.lijense.key;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -16,6 +16,9 @@ import java.security.PublicKey;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import de.rhocas.lijense.key.KeyException;
+import de.rhocas.lijense.key.KeyUtil;
 
 /**
  * Unit test for {@link KeyUtil}.
