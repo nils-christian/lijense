@@ -28,4 +28,21 @@
 		</dependency>
 	</dependencies>
 
+	<url>https://github.com/nils-christian/lijense</url>
+	
+	<licenses>
+		<license>
+			<name>MIT</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/nils-christian/lijense.git</url>
+	</scm>
+
+	<issueManagement>
+		<url>https://github.com/nils-christian/lijense/issues</url>
+	</issueManagement>
+
 </project>
