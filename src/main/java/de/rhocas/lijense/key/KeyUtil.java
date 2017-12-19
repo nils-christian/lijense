@@ -268,6 +268,22 @@ public final class KeyUtil {
 	}
 
 	/**
+	 * This method calculates the fingerprint for a given public key. This fingerprint can be used to check that a public key has not been tampered with.
+	 *
+	 * @param aPublicKey
+	 *            The public key for which the fingerprint should be calculated.
+	 * @return The fingerprint of the key.
+	 *
+	 * @throws KeyException
+	 *             If something went wrong while calculating the fingerprint. This usually indicates that the hash algorithm is not provided by the underlying
+	 *             Java runtime environment or that the given array does not contain a valid public key.
+	 */
+	public static byte[] calculateFingerprint( final byte[] aPublicKey ) throws KeyException {
+		final PublicKey publicKey = loadPublicKeyFromArray( aPublicKey );
+		return calculateFingerprint( publicKey );
+	}
+
+	/**
 	 * This method checks whether the given fingerprint is valid for the given public key.
 	 *
 	 * @param aPublicKey

@@ -37,10 +37,28 @@ public final class LicenseException extends Exception {
 
 	private static final long serialVersionUID = 577141289233795406L;
 
+	/**
+	 * Creates a new instance of this exception.
+	 *
+	 * @param aMessage
+	 *            The message.
+	 *
+	 * @since 1.0.0
+	 */
 	public LicenseException( final String aMessage ) {
 		super( aMessage );
 	}
 
+	/**
+	 * Creates a new instance of this exception.
+	 *
+	 * @param aMessage
+	 *            The message.
+	 * @param aCause
+	 *            The root cause.
+	 *
+	 * @since 1.0.0
+	 */
 	public LicenseException( final String aMessage, final Throwable aCause ) {
 		super( aMessage, aCause );
 	}

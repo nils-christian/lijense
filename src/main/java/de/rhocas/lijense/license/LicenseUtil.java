@@ -173,6 +173,30 @@ public class LicenseUtil {
 	}
 
 	/**
+	 * This method loads the license from the given byte array and verifies the digital signature with the public key. Optionally, one can also verify the
+	 * public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment.
+	 *
+	 * @param aPublicKey
+	 *            The public key, which is used to check the digital signature.
+	 * @param aArray
+	 *            The byte array.
+	 * @param aFingerprint
+	 *            The expected fingerprint of the public key.
+	 *
+	 * @return The license content.
+	 *
+	 * @throws LicenseException
+	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment, that
+	 *             an IO error occurred, that the actual fingerprint of the public key does not match the expected fingerprint or that the digital signature of
+	 *             the license file is not valid.
+	 *
+	 * @since 1.0.0
+	 */
+	public static UnmodifiableLicense loadLicenseFileFromArray( final PublicKey aPublicKey, final byte[] aArray, final Optional<byte[]> aFingerprint ) throws LicenseException {
+		return loadLicenseFileFromInputStream( aPublicKey, new ByteArrayInputStream( aArray ), aFingerprint );
+	}
+
+	/**
 	 * This method loads the license from the given input stream and verifies the digital signature with the public key. Optionally, one can also verify the
 	 * public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment. The stream is closed afterwards.
 	 *

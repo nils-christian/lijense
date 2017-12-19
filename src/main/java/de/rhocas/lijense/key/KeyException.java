@@ -37,6 +37,16 @@ public final class KeyException extends Exception {
 
 	private static final long serialVersionUID = -1841845934432427692L;
 
+	/**
+	 * Creates a new instance of this exception.
+	 *
+	 * @param aMessage
+	 *            The message.
+	 * @param aCause
+	 *            The root cause.
+	 *
+	 * @since 1.0.0
+	 */
 	public KeyException( final String aMessage, final Throwable aCause ) {
 		super( aMessage, aCause );
 	}

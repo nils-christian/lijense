@@ -28,6 +28,7 @@ package de.rhocas.lijense.license;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,8 @@ import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Optional;
 
 import org.junit.Rule;
@@ -42,6 +45,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
+import de.rhocas.lijense.io.IOUtil;
 import de.rhocas.lijense.key.KeyException;
 import de.rhocas.lijense.key.KeyUtil;
 import de.rhocas.lijense.key.KeyUtilTest;
@@ -60,7 +64,8 @@ public final class LicenseUtilTest {
 	public ExpectedException ivExpectedException = ExpectedException.none( );
 
 	@Test
-	public void testSaveAndLoadLicense( ) throws KeyException, LicenseException, IOException {
+	@SuppressWarnings ( "deprecation" )
+	public void testSaveAndLoadLicense( ) throws KeyException, LicenseException, IOException, ParseException {
 		final File targetFile = ivTemporaryFolder.newFile( );
 
 		// Generate a new key pair
@@ -71,11 +76,13 @@ public final class LicenseUtilTest {
 		// Create and sign the license file
 		final ModifiableLicense modifiableLicense = new ModifiableLicense( );
 		modifiableLicense.setProperty( "myFeature.active", "true" );
+		modifiableLicense.setExpirationDate( new Date( 2000 - 1900, 2 - 1, 1 ) );
 		LicenseUtil.saveLicenseFile( modifiableLicense, privateKey, targetFile );
 
 		// Load and verify the license file (without fingerprint for the public key)
 		final UnmodifiableLicense unmodifiableLicense = LicenseUtil.loadLicenseFile( publicKey, targetFile, Optional.<byte[]>empty( ) );
 		assertThat( unmodifiableLicense.getValue( "myFeature.active" ), is( "true" ) );
+		assertTrue( unmodifiableLicense.isExpired( ) );
 	}
 
 	@Test
@@ -141,6 +148,18 @@ public final class LicenseUtilTest {
 		ivExpectedException.expect( LicenseException.class );
 		ivExpectedException.expectMessage( "The actual fingerprint of the public key does not match the expected fingerprint." );
 		LicenseUtil.loadLicenseFileFromInputStream( publicKey, licenseInputStream, Optional.of( expectedFingerprint ) );
+	}
+
+	@Test
+	public void testLoadLicenseFromArray( ) throws KeyException, LicenseException, IOException {
+		final InputStream keyInputStream = loadResourceAsStream( "key.public" );
+		final PublicKey publicKey = KeyUtil.loadPublicKeyFromStream( keyInputStream );
+
+		final InputStream licenseInputStream = loadResourceAsStream( "valid.license" );
+		final byte[] licenseArray = IOUtil.readAllBytes( licenseInputStream );
+
+		final UnmodifiableLicense license = LicenseUtil.loadLicenseFileFromArray( publicKey, licenseArray, Optional.<byte[]>empty( ) );
+		assertThat( license.getValue( "myFeature.active" ), is( "true" ) );
 	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {

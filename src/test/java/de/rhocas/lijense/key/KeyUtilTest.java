@@ -43,6 +43,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import de.rhocas.lijense.io.IOUtil;
+
 /**
  * Unit test for {@link KeyUtil}.
  *
@@ -96,6 +98,25 @@ public final class KeyUtilTest {
 	public void testCalculateFingerprint( ) throws KeyException {
 		final InputStream inputStream = loadResourceAsStream( "key.public" );
 		final PublicKey publicKey = KeyUtil.loadPublicKeyFromStream( inputStream );
+
+		final byte[] actualFingerprint = KeyUtil.calculateFingerprint( publicKey );
+		final byte[] expectedFingerprint = new byte[] { //
+				-96, -95, 56, -80, 0, -5, 49, -82, //
+				-34, 44, -112, -20, -110, -38, 21, 28, //
+				72, 88, 96, 37, -24, 48, -122, 34, //
+				-12, 46, -109, 40, -4, -46, 105, -49, //
+				117, 59, 30, 124, 4, -67, -107, -90, //
+				-62, 115, 110, -102, 127, -126, 119, 78, //
+				-75, 46, 30, 101, -53, -49, 59, 71, //
+				-97, 54, -58, -38, 31, 102, 58, -122 };
+
+		assertThat( actualFingerprint, is( expectedFingerprint ) );
+	}
+
+	@Test
+	public void testCalculateFingerprintForArray( ) throws KeyException, IOException {
+		final InputStream inputStream = loadResourceAsStream( "key.public" );
+		final byte[] publicKey = IOUtil.readAllBytes( inputStream );
 
 		final byte[] actualFingerprint = KeyUtil.calculateFingerprint( publicKey );
 		final byte[] expectedFingerprint = new byte[] { //

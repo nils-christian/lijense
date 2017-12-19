@@ -44,7 +44,7 @@ public final class ModifiableLicense extends Properties {
 	private static final long serialVersionUID = -8676543638086345999L;
 
 	/**
-	 * Sets the value for the given key.
+	 * Sets the value for the given key. If the given value is {@code null}, the mapping is simply removed from the properties map.
 	 *
 	 * @param aKey
 	 *            The key.
@@ -54,7 +54,11 @@ public final class ModifiableLicense extends Properties {
 	 * @since 1.0.0
 	 */
 	public void setValue( final String aKey, final String aValue ) {
-		setProperty( aKey, aValue );
+		if ( aValue != null ) {
+			setProperty( aKey, aValue );
+		} else {
+			remove( aKey );
+		}
 	}
 
 	/**

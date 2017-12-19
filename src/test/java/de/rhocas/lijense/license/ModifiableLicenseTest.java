@@ -27,9 +27,11 @@
 package de.rhocas.lijense.license;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.junit.Test;
@@ -106,7 +108,7 @@ public final class ModifiableLicenseTest {
 	}
 
 	@Test
-	public void testSetValueDate( ) {
+	public void testSetValueDate1( ) {
 		final ModifiableLicense license = new ModifiableLicense( );
 		final Calendar calendar = new GregorianCalendar( );
 		calendar.set( 2000, 11, 1 );
@@ -114,6 +116,15 @@ public final class ModifiableLicenseTest {
 		license.setValue( "key", calendar.getTime( ) );
 
 		assertThat( license.get( "key" ), is( "2000-12-01" ) );
+	}
+
+	@Test
+	public void testSetValueDate2( ) {
+		final ModifiableLicense license = new ModifiableLicense( );
+
+		license.setValue( "key", (Date) null );
+
+		assertThat( license.get( "key" ), is( nullValue( ) ) );
 	}
 
 }
