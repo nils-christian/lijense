@@ -243,4 +243,37 @@ public class UnmodifiableLicenseTest {
 		assertFalse( license.isExpired( ) );
 	}
 
+	@Test
+	public void testIsFeatureActive1( ) throws ParseException {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "feature", "true" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		assertTrue( license.isFeatureActive( "feature" ) );
+	}
+
+	@Test
+	public void testIsFeatureActive2( ) throws ParseException {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "feature", "false" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		assertFalse( license.isFeatureActive( "feature" ) );
+	}
+
+	@Test
+	public void testIsFeatureActive3( ) throws ParseException {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "feature", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		assertFalse( license.isFeatureActive( "feature" ) );
+	}
+
+	@Test
+	public void testIsFeatureActive4( ) throws ParseException {
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertFalse( license.isFeatureActive( "feature" ) );
+	}
+
 }
