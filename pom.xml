@@ -60,18 +60,44 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
 	<licenses>
 		<license>
 			<name>MIT</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
+	<developers>
+		<developer>
+			<name>Nils Christian Ehmke</name>
+			<email>nils@rhocas.de</email>
+			<organization>Private</organization>
+			<organizationUrl>https://github.com/nils-christian</organizationUrl>
+		</developer>
+	</developers>
+
 	<scm>
-		<url>https://github.com/nils-christian/lijense.git</url>
+		<connection>scm:git:git://github.com/nils-christian/lijense.git</connection>
+		<developerConnection>scm:git:ssh://github.com:nils-christian/lijense.git</developerConnection>
+		<url>http://github.com/nils-christian/lijense/tree/master</url>
 	</scm>
 
 	<issueManagement>
