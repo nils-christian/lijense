@@ -26,12 +26,11 @@
 
 package de.rhocas.lijense.io;
 
-import static de.rhocas.lijense.Constants.LICENSE_ENCODING;
+import static de.rhocas.lijense.Constants.LICENSE_ENCODING_CHARSET;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
@@ -91,7 +90,7 @@ public class IOUtil {
 	 */
 	public static String binaryToString( final byte[] aBinary ) {
 		final byte[] stringBytes = binaryToBinaryString( aBinary );
-		return new String( stringBytes, Charset.forName( LICENSE_ENCODING ) );
+		return new String( stringBytes, LICENSE_ENCODING_CHARSET );
 	}
 
 	/**
@@ -106,7 +105,7 @@ public class IOUtil {
 	 */
 	public static byte[] stringToBinary( final String aString ) {
 		final Decoder decoder = Base64.getDecoder( );
-		final byte[] stringBytes = aString.getBytes( Charset.forName( LICENSE_ENCODING ) );
+		final byte[] stringBytes = aString.getBytes( LICENSE_ENCODING_CHARSET );
 		return decoder.decode( stringBytes );
 	}
 
@@ -121,14 +120,14 @@ public class IOUtil {
 	 * @since 2.0.0
 	 */
 	public static byte[] binaryStringToBinary( final byte[] aString ) {
-		final String base64EncodedString = new String( aString, Charset.forName( LICENSE_ENCODING ) );
+		final String base64EncodedString = new String( aString, LICENSE_ENCODING_CHARSET );
 		return stringToBinary( base64EncodedString );
 	}
 
 	/**
 	 * This method converts the given binary data to an ASCII string (given in binary format) by using Base64 encoding.
 	 *
-	 * @param aBinary
+	 * @param aString
 	 *            The binary array.
 	 *
 	 * @return The Base64 encoded data.

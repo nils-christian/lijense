@@ -26,6 +26,7 @@
 
 package de.rhocas.lijense;
 
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -75,11 +76,18 @@ public final class Constants {
 	public static final String SIGNATURE_ALGORITHM = "SHA512withRSA";
 
 	/**
-	 * This is the encoding of the internal properties file. This is currently UTF-8.
+	 * This is the encoding of the internal properties file and the license itself. This is currently UTF-8.
 	 *
 	 * @since 1.0.0
 	 */
 	public static final String LICENSE_ENCODING = "UTF-8";
+
+	/**
+	 * This is the encoding of the internal properties file and the license itself. This is currently UTF-8.
+	 *
+	 * @since 2.0.0
+	 */
+	public static final Charset LICENSE_ENCODING_CHARSET = Charset.forName( LICENSE_ENCODING );
 
 	/**
 	 * This is the date format used to encode and parse dates in the license file.

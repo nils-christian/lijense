@@ -27,6 +27,7 @@
 package de.rhocas.lijense.license;
 
 import static de.rhocas.lijense.Constants.LICENSE_ENCODING;
+import static de.rhocas.lijense.Constants.LICENSE_ENCODING_CHARSET;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,7 +36,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.security.InvalidKeyException;
@@ -197,7 +197,7 @@ public class LicenseUtil {
 	 * @since 2.0.0
 	 */
 	public static UnmodifiableLicense loadLicenseFileFromString( final PublicKey aPublicKey, final String aString, final Optional<byte[]> aFingerprint ) throws LicenseException {
-		final byte[] stringBytes = aString.getBytes( Charset.forName( LICENSE_ENCODING ) );
+		final byte[] stringBytes = aString.getBytes( LICENSE_ENCODING_CHARSET );
 		return loadLicenseFileFromInputStream( aPublicKey, new ByteArrayInputStream( stringBytes ), aFingerprint );
 	}
 
@@ -235,7 +235,7 @@ public class LicenseUtil {
 			final byte[] licenseData;
 			try {
 				final byte[] binaryData = IOUtil.readAllBytes( aStream );
-				final String string = new String( binaryData, Charset.forName( LICENSE_ENCODING ) );
+				final String string = new String( binaryData, LICENSE_ENCODING_CHARSET );
 				licenseData = IOUtil.stringToBinary( string );
 			} finally {
 				aStream.close( );

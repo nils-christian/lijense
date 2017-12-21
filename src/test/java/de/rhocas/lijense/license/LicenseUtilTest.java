@@ -26,7 +26,7 @@
 
 package de.rhocas.lijense.license;
 
-import static de.rhocas.lijense.Constants.LICENSE_ENCODING;
+import static de.rhocas.lijense.Constants.LICENSE_ENCODING_CHARSET;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -34,7 +34,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -50,7 +49,7 @@ import org.junit.rules.TemporaryFolder;
 import de.rhocas.lijense.io.IOUtil;
 import de.rhocas.lijense.key.KeyException;
 import de.rhocas.lijense.key.KeyUtil;
-import de.rhocas.lijense.key.KeyUtilTest;;
+import de.rhocas.lijense.key.KeyUtilTest;
 
 /**
  * Unit test for {@link LicenseUtil}.
@@ -159,7 +158,7 @@ public final class LicenseUtilTest {
 
 		final InputStream licenseInputStream = loadResourceAsStream( "valid.license" );
 		final byte[] licenseArray = IOUtil.readAllBytes( licenseInputStream );
-		final String licenseString = new String( licenseArray, Charset.forName( LICENSE_ENCODING ) );
+		final String licenseString = new String( licenseArray, LICENSE_ENCODING_CHARSET );
 
 		final UnmodifiableLicense license = LicenseUtil.loadLicenseFileFromString( publicKey, licenseString, Optional.<byte[]>empty( ) );
 		assertThat( license.getValue( "myFeature.active" ), is( "true" ) );
