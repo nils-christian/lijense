@@ -43,14 +43,19 @@ public final class IOUtilTest {
 
 	@Test
 	public void testReadAllBytes( ) throws IOException {
-		final byte[] buffer = new byte[2000];
-		for ( int i = 0; i < buffer.length; i++ ) {
-			buffer[i] = (byte) ( i % 256 );
-		}
+		final byte[] buffer = createAndFillBuffer( );
 		final ByteArrayInputStream inputStream = new ByteArrayInputStream( buffer );
 
 		final byte[] readBytes = IOUtil.readAllBytes( inputStream );
 		assertThat( readBytes, is( buffer ) );
+	}
+
+	private byte[] createAndFillBuffer( ) {
+		final byte[] buffer = new byte[2000];
+		for ( int i = 0; i < buffer.length; i++ ) {
+			buffer[i] = (byte) ( i % 256 );
+		}
+		return buffer;
 	}
 
 	@Test
