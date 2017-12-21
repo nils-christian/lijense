@@ -116,7 +116,8 @@ public final class KeyUtilTest {
 	@Test
 	public void testCalculateFingerprintForArray( ) throws KeyException, IOException {
 		final InputStream inputStream = loadResourceAsStream( "key.public" );
-		final byte[] publicKey = IOUtil.readAllBytes( inputStream );
+		final byte[] publicKeyEncoded = IOUtil.readAllBytes( inputStream );
+		final byte[] publicKey = IOUtil.binaryStringToBinary( publicKeyEncoded );
 
 		final byte[] actualFingerprint = KeyUtil.calculateFingerprint( publicKey );
 		final byte[] expectedFingerprint = new byte[] { //

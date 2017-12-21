@@ -26,9 +26,15 @@
 
 package de.rhocas.lijense.io;
 
+import static de.rhocas.lijense.Constants.LICENSE_ENCODING;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 
 /**
  * This is an internal helper util class to handle some IO issues.
@@ -71,6 +77,67 @@ public class IOUtil {
 		} while ( read > 0 );
 
 		return outputStream.toByteArray( );
+	}
+
+	/**
+	 * This method converts the given binary data to an ASCII string by using Base64 encoding.
+	 *
+	 * @param aBinary
+	 *            The binary array.
+	 *
+	 * @return The Base64 encoded data.
+	 *
+	 * @since 2.0.0
+	 */
+	public static String binaryToString( final byte[] aBinary ) {
+		final byte[] stringBytes = binaryToBinaryString( aBinary );
+		return new String( stringBytes, Charset.forName( LICENSE_ENCODING ) );
+	}
+
+	/**
+	 * This method converts the given ASCII string to binary data by using Base64 decoding.
+	 *
+	 * @param aString
+	 *            The Base64 encoded data.
+	 *
+	 * @return The binary data.
+	 *
+	 * @since 2.0.0
+	 */
+	public static byte[] stringToBinary( final String aString ) {
+		final Decoder decoder = Base64.getDecoder( );
+		final byte[] stringBytes = aString.getBytes( Charset.forName( LICENSE_ENCODING ) );
+		return decoder.decode( stringBytes );
+	}
+
+	/**
+	 * This method converts the given ASCII string (given in binary format) to binary data by using Base64 decoding.
+	 *
+	 * @param aString
+	 *            The Base64 encoded data.
+	 *
+	 * @return The binary data.
+	 *
+	 * @since 2.0.0
+	 */
+	public static byte[] binaryStringToBinary( final byte[] aString ) {
+		final String base64EncodedString = new String( aString, Charset.forName( LICENSE_ENCODING ) );
+		return stringToBinary( base64EncodedString );
+	}
+
+	/**
+	 * This method converts the given binary data to an ASCII string (given in binary format) by using Base64 encoding.
+	 *
+	 * @param aBinary
+	 *            The binary array.
+	 *
+	 * @return The Base64 encoded data.
+	 *
+	 * @since 2.0.0
+	 */
+	public static byte[] binaryToBinaryString( final byte[] aString ) {
+		final Encoder encoder = Base64.getEncoder( );
+		return encoder.encode( aString );
 	}
 
 }

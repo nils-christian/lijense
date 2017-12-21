@@ -26,6 +26,8 @@
 
 package de.rhocas.lijense.license;
 
+import static de.rhocas.lijense.Constants.LICENSE_ENCODING;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.security.InvalidKeyException;
@@ -77,15 +80,15 @@ public class LicenseUtil {
 	 * @param aPrivateKey
 	 *            The private key for the signature.
 	 *
-	 * @return The new license file as binary content.
+	 * @return The new license file as Base64 encoded string.
 	 *
 	 * @throws LicenseException
 	 *             If something went wrong while creating the license. This indicated usually that the algorithms are not provided by the underlying Java
 	 *             runtime environment or that an IO error occurred.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
-	public static byte[] createLicenseFile( final ModifiableLicense aLicense, final PrivateKey aPrivateKey ) throws LicenseException {
+	public static String createLicenseFile( final ModifiableLicense aLicense, final PrivateKey aPrivateKey ) throws LicenseException {
 		try {
 			// Store the license as binary content
 			final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream( );
@@ -112,7 +115,8 @@ public class LicenseUtil {
 				zipOutputStream.closeEntry( );
 			}
 
-			return byteArrayOutputStream.toByteArray( );
+			final byte[] binaryResult = byteArrayOutputStream.toByteArray( );
+			return IOUtil.binaryToString( binaryResult );
 		} catch ( final NoSuchAlgorithmException | IOException | InvalidKeyException | SignatureException ex ) {
 			throw new LicenseException( "Could not create the license", ex );
 		}
@@ -137,8 +141,8 @@ public class LicenseUtil {
 	 */
 	public static void saveLicenseFile( final ModifiableLicense aLicense, final PrivateKey aPrivateKey, final File aFile ) throws LicenseException {
 		try {
-			final byte[] binaryContent = createLicenseFile( aLicense, aPrivateKey );
-			Files.write( aFile.toPath( ), binaryContent, StandardOpenOption.CREATE );
+			final String encodedLicense = createLicenseFile( aLicense, aPrivateKey );
+			Files.write( aFile.toPath( ), encodedLicense.getBytes( LICENSE_ENCODING ), StandardOpenOption.CREATE );
 		} catch ( final IOException ex ) {
 			throw new LicenseException( "Could not save the license", ex );
 		}
@@ -173,13 +177,13 @@ public class LicenseUtil {
 	}
 
 	/**
-	 * This method loads the license from the given byte array and verifies the digital signature with the public key. Optionally, one can also verify the
-	 * public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment.
+	 * This method loads the license from the given Base64-encoded string and verifies the digital signature with the public key. Optionally, one can also
+	 * verify the public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment.
 	 *
 	 * @param aPublicKey
 	 *            The public key, which is used to check the digital signature.
-	 * @param aArray
-	 *            The byte array.
+	 * @param aString
+	 *            The string.
 	 * @param aFingerprint
 	 *            The expected fingerprint of the public key.
 	 *
@@ -190,10 +194,11 @@ public class LicenseUtil {
 	 *             an IO error occurred, that the actual fingerprint of the public key does not match the expected fingerprint or that the digital signature of
 	 *             the license file is not valid.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
-	public static UnmodifiableLicense loadLicenseFileFromArray( final PublicKey aPublicKey, final byte[] aArray, final Optional<byte[]> aFingerprint ) throws LicenseException {
-		return loadLicenseFileFromInputStream( aPublicKey, new ByteArrayInputStream( aArray ), aFingerprint );
+	public static UnmodifiableLicense loadLicenseFileFromString( final PublicKey aPublicKey, final String aString, final Optional<byte[]> aFingerprint ) throws LicenseException {
+		final byte[] stringBytes = aString.getBytes( Charset.forName( LICENSE_ENCODING ) );
+		return loadLicenseFileFromInputStream( aPublicKey, new ByteArrayInputStream( stringBytes ), aFingerprint );
 	}
 
 	/**
@@ -226,11 +231,21 @@ public class LicenseUtil {
 				}
 			}
 
+			// Base64 decoding
+			final byte[] licenseData;
+			try {
+				final byte[] binaryData = IOUtil.readAllBytes( aStream );
+				final String string = new String( binaryData, Charset.forName( LICENSE_ENCODING ) );
+				licenseData = IOUtil.stringToBinary( string );
+			} finally {
+				aStream.close( );
+			}
+
 			// Now we should load both files in the archive
 			final byte[] binaryLicense;
 			final byte[] binarySignature;
 
-			try ( final ZipInputStream zipInputStream = new ZipInputStream( aStream ) ) {
+			try ( final ZipInputStream zipInputStream = new ZipInputStream( new ByteArrayInputStream( licenseData ) ) ) {
 				zipInputStream.getNextEntry( );
 				binaryLicense = IOUtil.readAllBytes( zipInputStream );
 				zipInputStream.closeEntry( );

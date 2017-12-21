@@ -53,4 +53,24 @@ public final class IOUtilTest {
 		assertThat( readBytes, is( buffer ) );
 	}
 
+	@Test
+	public void testBinaryToString( ) {
+		assertThat( IOUtil.binaryToString( "liJense".getBytes( ) ), is( "bGlKZW5zZQ==" ) );
+	}
+
+	@Test
+	public void testStringToBinary( ) {
+		assertThat( IOUtil.stringToBinary( "bGlKZW5zZQ==" ), is( "liJense".getBytes( ) ) );
+	}
+
+	@Test
+	public void testBinaryToBinaryString( ) {
+		assertThat( IOUtil.binaryToBinaryString( "liJense".getBytes( ) ), is( "bGlKZW5zZQ==".getBytes( ) ) );
+	}
+
+	@Test
+	public void testBinaryStringToBinary( ) {
+		assertThat( IOUtil.binaryStringToBinary( "bGlKZW5zZQ==".getBytes( ) ), is( "liJense".getBytes( ) ) );
+	}
+
 }

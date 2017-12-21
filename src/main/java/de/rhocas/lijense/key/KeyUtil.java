@@ -90,8 +90,8 @@ public final class KeyUtil {
 	}
 
 	/**
-	 * This method saves the given key (either a private or a public key) in binary format in the given file. If the file does not exist, it will be created.
-	 * Private keys are saved in the PKCS format, public keys in the X.509 format.
+	 * This method saves the given key (either a private or a public key) in Base64 encoded ASCII format in the given file. If the file does not exist, it will
+	 * be created. Private keys are saved in the PKCS format, public keys in the X.509 format.
 	 *
 	 * @param aKey
 	 *            The key to be saved in the file.
@@ -105,14 +105,17 @@ public final class KeyUtil {
 	 */
 	public static void saveKeyToFile( final Key aKey, final File aFile ) throws KeyException {
 		try {
-			Files.write( aFile.toPath( ), aKey.getEncoded( ), StandardOpenOption.CREATE );
+			final byte[] encodedKey = aKey.getEncoded( );
+			final byte[] base64EncodedKey = IOUtil.binaryToBinaryString( encodedKey );
+
+			Files.write( aFile.toPath( ), base64EncodedKey, StandardOpenOption.CREATE );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not save the key", ex );
 		}
 	}
 
 	/**
-	 * This method loads a private key from the given binary file.
+	 * This method loads a private key from the given Base64 encoded ASCII file.
 	 *
 	 * @param aFile
 	 *            The file which contains the private key.
@@ -126,15 +129,17 @@ public final class KeyUtil {
 	 */
 	public static PrivateKey loadPrivateKeyFromFile( final File aFile ) throws KeyException {
 		try {
-			final byte[] binaryContent = Files.readAllBytes( aFile.toPath( ) );
-			return loadPrivateKeyFromArray( binaryContent );
+			final byte[] base64EncodedKey = Files.readAllBytes( aFile.toPath( ) );
+			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
+
+			return loadPrivateKeyFromArray( encodedKey );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not load the key", ex );
 		}
 	}
 
 	/**
-	 * This method loads a private key from the given stream. The stream is not closed.
+	 * This method loads a private key from the given stream. It is assumed that the stream contains Base64 encoded ASCII data. The stream is not closed.
 	 *
 	 * @param aStream
 	 *            The stream which contains the private key.
@@ -148,15 +153,17 @@ public final class KeyUtil {
 	 */
 	public static PrivateKey loadPrivateKeyFromStream( final InputStream aStream ) throws KeyException {
 		try {
-			final byte[] binaryContent = IOUtil.readAllBytes( aStream );
-			return loadPrivateKeyFromArray( binaryContent );
+			final byte[] base64EncodedKey = IOUtil.readAllBytes( aStream );
+			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
+
+			return loadPrivateKeyFromArray( encodedKey );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not load the key", ex );
 		}
 	}
 
 	/**
-	 * This method loads a private key from the given array.
+	 * This method loads a private key from the given array. It is assumed that the key is available in binary (not Base64 encoded) data.
 	 *
 	 * @param aArray
 	 *            The array which contains the private key.
@@ -180,7 +187,7 @@ public final class KeyUtil {
 	}
 
 	/**
-	 * This method loads a public key from the given binary file.
+	 * This method loads a public key from the given Base64 encoded ASCII file.
 	 *
 	 * @param aFile
 	 *            The file which contains the public key.
@@ -194,15 +201,17 @@ public final class KeyUtil {
 	 */
 	public static PublicKey loadPublicKeyFromFile( final File aFile ) throws KeyException {
 		try {
-			final byte[] binaryContent = Files.readAllBytes( aFile.toPath( ) );
-			return loadPublicKeyFromArray( binaryContent );
+			final byte[] base64EncodedKey = Files.readAllBytes( aFile.toPath( ) );
+			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
+
+			return loadPublicKeyFromArray( encodedKey );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not load the key", ex );
 		}
 	}
 
 	/**
-	 * This method loads a public key from the given stream. The stream is not closed.
+	 * This method loads a public key from the given stream. It is assumed that the stream contains Base64 encoded ASCII data. The stream is not closed.
 	 *
 	 * @param aStream
 	 *            The stream which contains the public key.
@@ -216,15 +225,17 @@ public final class KeyUtil {
 	 */
 	public static PublicKey loadPublicKeyFromStream( final InputStream aStream ) throws KeyException {
 		try {
-			final byte[] binaryContent = IOUtil.readAllBytes( aStream );
-			return loadPublicKeyFromArray( binaryContent );
+			final byte[] base64EncodedKey = IOUtil.readAllBytes( aStream );
+			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
+
+			return loadPublicKeyFromArray( encodedKey );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not load the key", ex );
 		}
 	}
 
 	/**
-	 * This method loads a public key from the given array.
+	 * This method loads a public key from the given array. It is assumed that the key is available in binary (not Base64 encoded) data.
 	 *
 	 * @param aArray
 	 *            The array which contains the public key.
@@ -257,6 +268,8 @@ public final class KeyUtil {
 	 * @throws KeyException
 	 *             If something went wrong while calculating the fingerprint. This usually indicates that the hash algorithm is not provided by the underlying
 	 *             Java runtime environment.
+	 *
+	 * @since 1.0.0
 	 */
 	public static byte[] calculateFingerprint( final PublicKey aPublicKey ) throws KeyException {
 		try {
@@ -277,6 +290,8 @@ public final class KeyUtil {
 	 * @throws KeyException
 	 *             If something went wrong while calculating the fingerprint. This usually indicates that the hash algorithm is not provided by the underlying
 	 *             Java runtime environment or that the given array does not contain a valid public key.
+	 *
+	 * @since 1.0.0
 	 */
 	public static byte[] calculateFingerprint( final byte[] aPublicKey ) throws KeyException {
 		final PublicKey publicKey = loadPublicKeyFromArray( aPublicKey );
@@ -295,6 +310,8 @@ public final class KeyUtil {
 	 * @throws KeyException
 	 *             If something went wrong while calculating the fingerprint. This usually indicates that the hash algorithm is not provided by the underlying
 	 *             Java runtime environment.
+	 *
+	 * @since 1.0.0
 	 */
 	public static boolean isFingerprintValid( final PublicKey aPublicKey, final byte[] aFingerprint ) throws KeyException {
 		final byte[] actualFingerprint = calculateFingerprint( aPublicKey );
