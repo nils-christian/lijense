@@ -10,7 +10,7 @@ In order to use liJense in your project, simply add the Maven dependency to your
 	<dependency>
 		<groupId>de.rhocas.lijense</groupId>
 		<artifactId>lijense</artifactId>
-		<version>1.0.0</version>
+		<version>2.0.0</version>
 	</dependency>
 
 The following snippet shows a simple example. It creates a new RSA key pair, creates a license file and loads it afterwards.

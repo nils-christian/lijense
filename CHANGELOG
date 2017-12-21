@@ -1,4 +1,4 @@
-2.0.0
+2.0.0 [2017-12-21]
 * Keys and license files are now Base64 encoded for an easier transfer via mail
 
 1.0.0 [2017-12-20]
