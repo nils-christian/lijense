@@ -177,6 +177,28 @@ public class LicenseUtil {
 	}
 
 	/**
+	 * This method loads the license from the given file, but does not verify it. This method should usually not be used in production environment.
+	 *
+	 * @param aFile
+	 *            The license file.
+	 *
+	 * @return The license content.
+	 *
+	 * @throws LicenseException
+	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment or
+	 *             that an IO error occurred.
+	 *
+	 * @since 2.1.0
+	 */
+	public static UnmodifiableLicense loadLicenseFileWithoutValidation( final File aFile ) throws LicenseException {
+		try {
+			return loadLicenseFileWithoutValidationFromInputStream( new FileInputStream( aFile ) );
+		} catch ( final FileNotFoundException ex ) {
+			throw new LicenseException( "Could not load the license", ex );
+		}
+	}
+
+	/**
 	 * This method loads the license from the given Base64-encoded string and verifies the digital signature with the public key. Optionally, one can also
 	 * verify the public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment.
 	 *
@@ -202,6 +224,26 @@ public class LicenseUtil {
 	}
 
 	/**
+	 * This method loads the license from the given Base64-encoded string, but does not verify it. This method should usually not be used in production
+	 * environment.
+	 *
+	 * @param aString
+	 *            The string.
+	 *
+	 * @return The license content.
+	 *
+	 * @throws LicenseException
+	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment or
+	 *             that an IO error occurred.
+	 *
+	 * @since 2.1.0
+	 */
+	public static UnmodifiableLicense loadLicenseFileWithoutValidationFromString( final String aString ) throws LicenseException {
+		final byte[] stringBytes = aString.getBytes( LICENSE_ENCODING_CHARSET );
+		return loadLicenseFileWithoutValidationFromInputStream( new ByteArrayInputStream( stringBytes ) );
+	}
+
+	/**
 	 * This method loads the license from the given input stream and verifies the digital signature with the public key. Optionally, one can also verify the
 	 * public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment. The stream is closed afterwards.
 	 *
@@ -223,10 +265,34 @@ public class LicenseUtil {
 	 */
 	public static UnmodifiableLicense loadLicenseFileFromInputStream( final PublicKey aPublicKey, final InputStream aStream, final Optional<byte[]> aFingerprint )
 			throws LicenseException {
+		return loadLicenseFileFromInputStream( Optional.of( aPublicKey ), aStream, aFingerprint, true );
+	}
+
+	/**
+	 * This method loads the license from the given input stream, but does not verify it. This method should usually not be used in production environment. The
+	 * stream is closed afterwards.
+	 *
+	 * @param aStream
+	 *            The input stream.
+	 *
+	 * @return The license content.
+	 *
+	 * @throws LicenseException
+	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment or
+	 *             that an IO error occurred.
+	 *
+	 * @since 2.1.0
+	 */
+	public static UnmodifiableLicense loadLicenseFileWithoutValidationFromInputStream( final InputStream aStream ) throws LicenseException {
+		return loadLicenseFileFromInputStream( Optional.empty( ), aStream, Optional.empty( ), false );
+	}
+
+	private static UnmodifiableLicense loadLicenseFileFromInputStream( final Optional<PublicKey> aPublicKey, final InputStream aStream, final Optional<byte[]> aFingerprint,
+			final boolean aCheckValidity ) throws LicenseException {
 		try {
 			// Check the fingerprint of the public key - if necessary
-			if ( aFingerprint.isPresent( ) ) {
-				if ( !KeyUtil.isFingerprintValid( aPublicKey, aFingerprint.get( ) ) ) {
+			if ( aFingerprint.isPresent( ) && aCheckValidity ) {
+				if ( !KeyUtil.isFingerprintValid( aPublicKey.get( ), aFingerprint.get( ) ) ) {
 					throw new LicenseException( "The actual fingerprint of the public key does not match the expected fingerprint." );
 				}
 			}
@@ -256,13 +322,15 @@ public class LicenseUtil {
 			}
 
 			// Now we can verify the signature
-			final Signature signature = Signature.getInstance( Constants.SIGNATURE_ALGORITHM );
-			signature.initVerify( aPublicKey );
-			signature.update( binaryLicense );
-			final boolean licenseValid = signature.verify( binarySignature );
+			if ( aCheckValidity ) {
+				final Signature signature = Signature.getInstance( Constants.SIGNATURE_ALGORITHM );
+				signature.initVerify( aPublicKey.get( ) );
+				signature.update( binaryLicense );
+				final boolean licenseValid = signature.verify( binarySignature );
 
-			if ( !licenseValid ) {
-				throw new LicenseException( "The license is not valid" );
+				if ( !licenseValid ) {
+					throw new LicenseException( "The license is not valid" );
+				}
 			}
 
 			// If everything is valid, we can load the properties file

@@ -87,6 +87,27 @@ public final class LicenseUtilTest {
 	}
 
 	@Test
+	@SuppressWarnings ( "deprecation" )
+	public void testSaveAndLoadLicenseWithoutValidation( ) throws KeyException, LicenseException, IOException, ParseException {
+		final File targetFile = ivTemporaryFolder.newFile( );
+
+		// Generate a new key pair
+		final KeyPair keyPair = KeyUtil.generateNewKeyPair( );
+		final PrivateKey privateKey = keyPair.getPrivate( );
+
+		// Create and sign the license file
+		final ModifiableLicense modifiableLicense = new ModifiableLicense( );
+		modifiableLicense.setProperty( "myFeature.active", "true" );
+		modifiableLicense.setExpirationDate( new Date( 2000 - 1900, 2 - 1, 1 ) );
+		LicenseUtil.saveLicenseFile( modifiableLicense, privateKey, targetFile );
+
+		// Load the license file
+		final UnmodifiableLicense unmodifiableLicense = LicenseUtil.loadLicenseFileWithoutValidation( targetFile );
+		assertThat( unmodifiableLicense.getValue( "myFeature.active" ), is( "true" ) );
+		assertTrue( unmodifiableLicense.isExpired( ) );
+	}
+
+	@Test
 	public void testLoadLicensePositive( ) throws KeyException, LicenseException {
 		final InputStream keyInputStream = loadResourceAsStream( "key.public" );
 		final PublicKey publicKey = KeyUtil.loadPublicKeyFromStream( keyInputStream );
@@ -162,6 +183,16 @@ public final class LicenseUtilTest {
 
 		final UnmodifiableLicense license = LicenseUtil.loadLicenseFileFromString( publicKey, licenseString, Optional.<byte[]>empty( ) );
 		assertThat( license.getValue( "myFeature.active" ), is( "true" ) );
+	}
+
+	@Test
+	public void testLoadLicenseWithoutValidationFromString( ) throws LicenseException, IOException {
+		final InputStream licenseInputStream = loadResourceAsStream( "invalid.license" );
+		final byte[] licenseArray = IOUtil.readAllBytes( licenseInputStream );
+		final String licenseString = new String( licenseArray, LICENSE_ENCODING_CHARSET );
+
+		final UnmodifiableLicense license = LicenseUtil.loadLicenseFileWithoutValidationFromString( licenseString );
+		assertThat( license.getValue( "myFeature.active" ), is( "false" ) );
 	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {
