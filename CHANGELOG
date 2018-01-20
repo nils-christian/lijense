@@ -1,3 +1,6 @@
+2.1.0 [?]
+* New LicenseUtil methods to load the license content without validation
+
 2.0.0 [2017-12-21]
 * Keys and license files are now Base64 encoded for an easier transfer via mail
 
