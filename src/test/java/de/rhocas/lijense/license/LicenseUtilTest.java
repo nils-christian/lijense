@@ -31,6 +31,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -193,6 +194,17 @@ public final class LicenseUtilTest {
 
 		final UnmodifiableLicense license = LicenseUtil.loadLicenseFileWithoutValidationFromString( licenseString );
 		assertThat( license.getValue( "myFeature.active" ), is( "false" ) );
+	}
+
+	@Test
+	public void testLoadLicenseFromEmptyInputStream( ) throws LicenseException, IOException {
+		final InputStream licenseInputStream = new ByteArrayInputStream( new byte[0] );
+		final byte[] licenseArray = IOUtil.readAllBytes( licenseInputStream );
+		final String licenseString = new String( licenseArray, LICENSE_ENCODING_CHARSET );
+
+		ivExpectedException.expect( LicenseException.class );
+		ivExpectedException.expectMessage( "Could not load the license" );
+		LicenseUtil.loadLicenseFileWithoutValidationFromString( licenseString );
 	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {
