@@ -1,25 +1,25 @@
 pipeline {
 
-    agent any
+	agent any
 
 	environment {
 		DOCKER_IMAGE = 'maven:3.5-jdk-8'
 	}
 	
-    stages {
-        stage('Docker Pull') {
-            steps {
+	stages {
+		stage('Docker Pull') {
+			steps {
 				bat 'docker pull %DOCKER_IMAGE%'
-            }
-        }
+			}
+		}
 		
 		stage('Build') {
-            steps {
+			steps {
 				bat 'docker run -v %WORKSPACE%:/workspace -w /workspace %DOCKER_IMAGE% /bin/bash -c "mvn clean package"'
 				archiveArtifacts artifacts: 'target/lijense-*.jar', fingerprint: true
-            }
-        }
-    }
+			}
+		}
+	}
 	
 	post {
 		always {
