@@ -28,10 +28,7 @@ package de.rhocas.lijense.license;
 
 import static de.rhocas.lijense.Constants.DATE_FORMAT;
 import static de.rhocas.lijense.Constants.LICENSE_KEY_EXPIRATION_DATE;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -53,13 +50,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "42" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsByte( "key", (byte) 0 ), is( (byte) 42 ) );
+		assertThat( license.getValueAsByte( "key", (byte) 0 ) ).isEqualTo( (byte) 42 );
 	}
 
 	@Test
 	public void testGetValueByteDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsByte( "key", (byte) 1 ), is( (byte) 1 ) );
+		assertThat( license.getValueAsByte( "key", (byte) 1 ) ).isEqualTo( (byte) 1 );
 	}
 
 	@Test
@@ -68,13 +65,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "42" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsShort( "key", (short) 0 ), is( (short) 42 ) );
+		assertThat( license.getValueAsShort( "key", (short) 0 ) ).isEqualTo( (short) 42 );
 	}
 
 	@Test
 	public void testGetValueShortDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsShort( "key", (short) 1 ), is( (short) 1 ) );
+		assertThat( license.getValueAsShort( "key", (short) 1 ) ).isEqualTo( (short) 1 );
 	}
 
 	@Test
@@ -83,13 +80,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "42" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsInt( "key", 0 ), is( 42 ) );
+		assertThat( license.getValueAsInt( "key", 0 ) ).isEqualTo( 42 );
 	}
 
 	@Test
 	public void testGetValueIntDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsInt( "key", 1 ), is( 1 ) );
+		assertThat( license.getValueAsInt( "key", 1 ) ).isEqualTo( 1 );
 	}
 
 	@Test
@@ -98,13 +95,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "42" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsLong( "key", 0L ), is( 42L ) );
+		assertThat( license.getValueAsLong( "key", 0L ) ).isEqualTo( 42L );
 	}
 
 	@Test
 	public void testGetValueLongDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsLong( "key", 1L ), is( 1L ) );
+		assertThat( license.getValueAsLong( "key", 1L ) ).isEqualTo( 1L );
 	}
 
 	@Test
@@ -113,13 +110,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "42.0" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsFloat( "key", 0.0f ), is( 42.0f ) );
+		assertThat( license.getValueAsFloat( "key", 0.0f ) ).isEqualTo( 42.0f );
 	}
 
 	@Test
 	public void testGetValueFloatDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsFloat( "key", 1.0f ), is( 1.0f ) );
+		assertThat( license.getValueAsFloat( "key", 1.0f ) ).isEqualTo( 1.0f );
 	}
 
 	@Test
@@ -128,13 +125,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "42.0" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsDouble( "key", 0.0 ), is( 42.0 ) );
+		assertThat( license.getValueAsDouble( "key", 0.0 ) ).isEqualTo( 42.0 );
 	}
 
 	@Test
 	public void testGetValueDoubleDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsDouble( "key", 1.0 ), is( 1.0 ) );
+		assertThat( license.getValueAsDouble( "key", 1.0 ) ).isEqualTo( 1.0 );
 	}
 
 	@Test
@@ -143,13 +140,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "false" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsBoolean( "key", true ), is( false ) );
+		assertThat( license.getValueAsBoolean( "key", true ) ).isFalse( );
 	}
 
 	@Test
 	public void testGetValueBooleanDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsBoolean( "key", true ), is( true ) );
+		assertThat( license.getValueAsBoolean( "key", true ) ).isTrue( );
 	}
 
 	@Test
@@ -158,13 +155,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "A" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsChar( "key", 'B' ), is( 'A' ) );
+		assertThat( license.getValueAsChar( "key", 'B' ) ).isEqualTo( 'A' );
 	}
 
 	@Test
 	public void testGetValueCharDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsChar( "key", 'B' ), is( 'B' ) );
+		assertThat( license.getValueAsChar( "key", 'B' ) ).isEqualTo( 'B' );
 	}
 
 	@Test
@@ -176,9 +173,9 @@ public class UnmodifiableLicenseTest {
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		final Date date = license.getValueAsDate( "key", null );
 
-		assertThat( date.getYear( ), is( 2000 - 1900 ) );
-		assertThat( date.getMonth( ), is( 12 - 1 ) );
-		assertThat( date.getDate( ), is( 1 ) );
+		assertThat( date.getYear( ) ).isEqualTo( 2000 - 1900 );
+		assertThat( date.getMonth( ) ).isEqualTo( 12 - 1 );
+		assertThat( date.getDate( ) ).isEqualTo( 1 );
 	}
 
 	@Test
@@ -192,9 +189,9 @@ public class UnmodifiableLicenseTest {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
 		final Date date = license.getValueAsDate( "key", defaultDate );
 
-		assertThat( date.getYear( ), is( 2000 - 1900 ) );
-		assertThat( date.getMonth( ), is( 12 - 1 ) );
-		assertThat( date.getDate( ), is( 1 ) );
+		assertThat( date.getYear( ) ).isEqualTo( 2000 - 1900 );
+		assertThat( date.getMonth( ) ).isEqualTo( 12 - 1 );
+		assertThat( date.getDate( ) ).isEqualTo( 1 );
 	}
 
 	@Test
@@ -205,8 +202,8 @@ public class UnmodifiableLicenseTest {
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		map.put( "key", "value2" );
 
-		assertThat( map.get( "key" ), is( "value2" ) );
-		assertThat( license.getValue( "key" ), is( "value1" ) );
+		assertThat( map.get( "key" ) ).isEqualTo( "value2" );
+		assertThat( license.getValue( "key" ) ).isEqualTo( "value1" );
 	}
 
 	@Test
@@ -216,7 +213,7 @@ public class UnmodifiableLicenseTest {
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 
-		assertTrue( license.isExpired( ) );
+		assertThat( license.isExpired( ) ).isTrue( );
 	}
 
 	@Test
@@ -225,7 +222,7 @@ public class UnmodifiableLicenseTest {
 		map.put( LICENSE_KEY_EXPIRATION_DATE, "3000-12-01" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertFalse( license.isExpired( ) );
+		assertThat( license.isExpired( ) ).isFalse( );
 	}
 
 	@Test
@@ -234,13 +231,13 @@ public class UnmodifiableLicenseTest {
 		map.put( LICENSE_KEY_EXPIRATION_DATE, DATE_FORMAT.format( new Date( ) ) );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertFalse( license.isExpired( ) );
+		assertThat( license.isExpired( ) ).isFalse( );
 	}
 
 	@Test
 	public void testIsExpired4( ) throws ParseException {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertFalse( license.isExpired( ) );
+		assertThat( license.isExpired( ) ).isFalse( );
 	}
 
 	@Test
@@ -249,7 +246,7 @@ public class UnmodifiableLicenseTest {
 		map.put( "feature", "true" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertTrue( license.isFeatureActive( "feature" ) );
+		assertThat( license.isFeatureActive( "feature" ) ).isTrue( );
 	}
 
 	@Test
@@ -258,7 +255,7 @@ public class UnmodifiableLicenseTest {
 		map.put( "feature", "false" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertFalse( license.isFeatureActive( "feature" ) );
+		assertThat( license.isFeatureActive( "feature" ) ).isFalse( );
 	}
 
 	@Test
@@ -267,13 +264,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "feature", "" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertFalse( license.isFeatureActive( "feature" ) );
+		assertThat( license.isFeatureActive( "feature" ) ).isFalse( );
 	}
 
 	@Test
 	public void testIsFeatureActive4( ) throws ParseException {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertFalse( license.isFeatureActive( "feature" ) );
+		assertThat( license.isFeatureActive( "feature" ) ).isFalse( );
 	}
 
 }

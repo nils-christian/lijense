@@ -26,9 +26,7 @@
 
 package de.rhocas.lijense.license;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -48,7 +46,7 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 		license.setValue( "key", (byte) 42 );
 
-		assertThat( license.get( "key" ), is( "42" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "42" );
 	}
 
 	@Test
@@ -56,7 +54,7 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 		license.setValue( "key", (short) 42 );
 
-		assertThat( license.get( "key" ), is( "42" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "42" );
 	}
 
 	@Test
@@ -64,7 +62,7 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 		license.setValue( "key", 42 );
 
-		assertThat( license.get( "key" ), is( "42" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "42" );
 	}
 
 	@Test
@@ -72,7 +70,7 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 		license.setValue( "key", 42L );
 
-		assertThat( license.get( "key" ), is( "42" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "42" );
 	}
 
 	@Test
@@ -80,7 +78,7 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 		license.setValue( "key", 42.0f );
 
-		assertThat( license.get( "key" ), is( "42.0" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "42.0" );
 	}
 
 	@Test
@@ -88,7 +86,7 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 		license.setValue( "key", 42.0 );
 
-		assertThat( license.get( "key" ), is( "42.0" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "42.0" );
 	}
 
 	@Test
@@ -96,7 +94,7 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 		license.setValue( "key", false );
 
-		assertThat( license.get( "key" ), is( "false" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "false" );
 	}
 
 	@Test
@@ -104,7 +102,7 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 		license.setValue( "key", 'A' );
 
-		assertThat( license.get( "key" ), is( "A" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "A" );
 	}
 
 	@Test
@@ -115,7 +113,7 @@ public final class ModifiableLicenseTest {
 
 		license.setValue( "key", calendar.getTime( ) );
 
-		assertThat( license.get( "key" ), is( "2000-12-01" ) );
+		assertThat( license.get( "key" ) ).isEqualTo( "2000-12-01" );
 	}
 
 	@Test
@@ -124,7 +122,7 @@ public final class ModifiableLicenseTest {
 
 		license.setValue( "key", (Date) null );
 
-		assertThat( license.get( "key" ), is( nullValue( ) ) );
+		assertThat( license.get( "key" ) ).isNull( );
 	}
 
 }

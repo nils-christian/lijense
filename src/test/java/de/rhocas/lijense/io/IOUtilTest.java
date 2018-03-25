@@ -26,8 +26,7 @@
 
 package de.rhocas.lijense.io;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -47,7 +46,7 @@ public final class IOUtilTest {
 		final ByteArrayInputStream inputStream = new ByteArrayInputStream( buffer );
 
 		final byte[] readBytes = IOUtil.readAllBytes( inputStream );
-		assertThat( readBytes, is( buffer ) );
+		assertThat( readBytes ).isEqualTo( buffer );
 	}
 
 	private byte[] createAndFillBuffer( ) {
@@ -60,22 +59,22 @@ public final class IOUtilTest {
 
 	@Test
 	public void testBinaryToString( ) {
-		assertThat( IOUtil.binaryToString( "liJense".getBytes( ) ), is( "bGlKZW5zZQ==" ) );
+		assertThat( IOUtil.binaryToString( "liJense".getBytes( ) ) ).isEqualTo( "bGlKZW5zZQ==" );
 	}
 
 	@Test
 	public void testStringToBinary( ) {
-		assertThat( IOUtil.stringToBinary( "bGlKZW5zZQ==" ), is( "liJense".getBytes( ) ) );
+		assertThat( IOUtil.stringToBinary( "bGlKZW5zZQ==" ) ).isEqualTo( "liJense".getBytes( ) );
 	}
 
 	@Test
 	public void testBinaryToBinaryString( ) {
-		assertThat( IOUtil.binaryToBinaryString( "liJense".getBytes( ) ), is( "bGlKZW5zZQ==".getBytes( ) ) );
+		assertThat( IOUtil.binaryToBinaryString( "liJense".getBytes( ) ) ).isEqualTo( "bGlKZW5zZQ==".getBytes( ) );
 	}
 
 	@Test
 	public void testBinaryStringToBinary( ) {
-		assertThat( IOUtil.binaryStringToBinary( "bGlKZW5zZQ==".getBytes( ) ), is( "liJense".getBytes( ) ) );
+		assertThat( IOUtil.binaryStringToBinary( "bGlKZW5zZQ==".getBytes( ) ) ).isEqualTo( "liJense".getBytes( ) );
 	}
 
 }

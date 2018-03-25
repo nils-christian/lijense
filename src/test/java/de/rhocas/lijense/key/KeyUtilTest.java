@@ -26,11 +26,7 @@
 
 package de.rhocas.lijense.key;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,15 +55,15 @@ public final class KeyUtilTest {
 
 		// Check the private key
 		final PrivateKey privateKey = keyPair.getPrivate( );
-		assertThat( privateKey.getAlgorithm( ), is( "RSA" ) );
-		assertThat( privateKey.getFormat( ), is( "PKCS#8" ) );
-		assertThat( privateKey.getEncoded( ), is( notNullValue( ) ) );
+		assertThat( privateKey.getAlgorithm( ) ).isEqualTo( "RSA" );
+		assertThat( privateKey.getFormat( ) ).isEqualTo( "PKCS#8" );
+		assertThat( privateKey.getEncoded( ) ).isNotNull( );
 
 		// Check the public key
 		final PublicKey publicKey = keyPair.getPublic( );
-		assertThat( publicKey.getAlgorithm( ), is( "RSA" ) );
-		assertThat( publicKey.getFormat( ), is( "X.509" ) );
-		assertThat( publicKey.getEncoded( ), is( notNullValue( ) ) );
+		assertThat( publicKey.getAlgorithm( ) ).isEqualTo( "RSA" );
+		assertThat( publicKey.getFormat( ) ).isEqualTo( "X.509" );
+		assertThat( publicKey.getEncoded( ) ).isNotNull( );
 	}
 
 	@Test
@@ -76,9 +72,9 @@ public final class KeyUtilTest {
 		final PrivateKey privateKey = KeyUtil.loadPrivateKeyFromStream( inputStream );
 
 		// Check the private key
-		assertThat( privateKey.getAlgorithm( ), is( "RSA" ) );
-		assertThat( privateKey.getFormat( ), is( "PKCS#8" ) );
-		assertThat( privateKey.getEncoded( ), is( notNullValue( ) ) );
+		assertThat( privateKey.getAlgorithm( ) ).isEqualTo( "RSA" );
+		assertThat( privateKey.getFormat( ) ).isEqualTo( "PKCS#8" );
+		assertThat( privateKey.getEncoded( ) ).isNotNull( );
 	}
 
 	@Test
@@ -87,9 +83,9 @@ public final class KeyUtilTest {
 		final PublicKey publicKey = KeyUtil.loadPublicKeyFromStream( inputStream );
 
 		// Check the public key
-		assertThat( publicKey.getAlgorithm( ), is( "RSA" ) );
-		assertThat( publicKey.getFormat( ), is( "X.509" ) );
-		assertThat( publicKey.getEncoded( ), is( notNullValue( ) ) );
+		assertThat( publicKey.getAlgorithm( ) ).isEqualTo( "RSA" );
+		assertThat( publicKey.getFormat( ) ).isEqualTo( "X.509" );
+		assertThat( publicKey.getEncoded( ) ).isNotNull( );
 	}
 
 	@Test
@@ -108,7 +104,7 @@ public final class KeyUtilTest {
 				-75, 46, 30, 101, -53, -49, 59, 71, //
 				-97, 54, -58, -38, 31, 102, 58, -122 };
 
-		assertThat( actualFingerprint, is( expectedFingerprint ) );
+		assertThat( actualFingerprint ).isEqualTo( expectedFingerprint );
 	}
 
 	@Test
@@ -127,7 +123,7 @@ public final class KeyUtilTest {
 				-75, 46, 30, 101, -53, -49, 59, 71, //
 				-97, 54, -58, -38, 31, 102, 58, -122 };
 
-		assertThat( actualFingerprint, is( expectedFingerprint ) );
+		assertThat( actualFingerprint ).isEqualTo( expectedFingerprint );
 	}
 
 	@Test
@@ -145,7 +141,7 @@ public final class KeyUtilTest {
 				-75, 46, 30, 101, -53, -49, 59, 71, //
 				-97, 54, -58, -38, 31, 102, 58, -122 };
 
-		assertTrue( KeyUtil.isFingerprintValid( publicKey, expectedFingerprint ) );
+		assertThat( KeyUtil.isFingerprintValid( publicKey, expectedFingerprint ) ).isTrue( );
 	}
 
 	@Test
@@ -163,7 +159,7 @@ public final class KeyUtilTest {
 				62, -19, 17, 73, 66, 11, 52, 21, //
 				76, 32, 35, -90, 55, 64, -63, -60 };
 
-		assertFalse( KeyUtil.isFingerprintValid( publicKey, expectedFingerprint ) );
+		assertThat( KeyUtil.isFingerprintValid( publicKey, expectedFingerprint ) ).isFalse( );
 	}
 
 	@Test
@@ -179,7 +175,7 @@ public final class KeyUtilTest {
 		final PrivateKey loadedPrivateKey = KeyUtil.loadPrivateKeyFromFile( targetFile );
 
 		// Compare the keys
-		assertThat( originalPrivateKey.getEncoded( ), is( loadedPrivateKey.getEncoded( ) ) );
+		assertThat( originalPrivateKey.getEncoded( ) ).isEqualTo( loadedPrivateKey.getEncoded( ) );
 	}
 
 	@Test
@@ -195,7 +191,7 @@ public final class KeyUtilTest {
 		final PublicKey loadedPublicKey = KeyUtil.loadPublicKeyFromFile( targetFile );
 
 		// Compare the keys
-		assertThat( originalPublicKey.getEncoded( ), is( loadedPublicKey.getEncoded( ) ) );
+		assertThat( originalPublicKey.getEncoded( ) ).isEqualTo( loadedPublicKey.getEncoded( ) );
 	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {

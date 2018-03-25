@@ -27,9 +27,7 @@
 package de.rhocas.lijense.license;
 
 import static de.rhocas.lijense.Constants.LICENSE_ENCODING_CHARSET;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -83,8 +81,8 @@ public final class LicenseUtilTest {
 
 		// Load and verify the license file (without fingerprint for the public key)
 		final UnmodifiableLicense unmodifiableLicense = LicenseUtil.loadLicenseFile( publicKey, targetFile, Optional.<byte[]>empty( ) );
-		assertThat( unmodifiableLicense.getValue( "myFeature.active" ), is( "true" ) );
-		assertTrue( unmodifiableLicense.isExpired( ) );
+		assertThat( unmodifiableLicense.getValue( "myFeature.active" ) ).isEqualTo( "true" );
+		assertThat( unmodifiableLicense.isExpired( ) ).isTrue( );
 	}
 
 	@Test
@@ -104,8 +102,8 @@ public final class LicenseUtilTest {
 
 		// Load the license file
 		final UnmodifiableLicense unmodifiableLicense = LicenseUtil.loadLicenseFileWithoutValidation( targetFile );
-		assertThat( unmodifiableLicense.getValue( "myFeature.active" ), is( "true" ) );
-		assertTrue( unmodifiableLicense.isExpired( ) );
+		assertThat( unmodifiableLicense.getValue( "myFeature.active" ) ).isEqualTo( "true" );
+		assertThat( unmodifiableLicense.isExpired( ) ).isTrue( );
 	}
 
 	@Test
@@ -126,7 +124,7 @@ public final class LicenseUtilTest {
 		final InputStream licenseInputStream = loadResourceAsStream( "valid.license" );
 
 		final UnmodifiableLicense license = LicenseUtil.loadLicenseFileFromInputStream( publicKey, licenseInputStream, Optional.of( expectedFingerprint ) );
-		assertThat( license.getValue( "myFeature.active" ), is( "true" ) );
+		assertThat( license.getValue( "myFeature.active" ) ).isEqualTo( "true" );
 	}
 
 	@Test
@@ -183,7 +181,7 @@ public final class LicenseUtilTest {
 		final String licenseString = new String( licenseArray, LICENSE_ENCODING_CHARSET );
 
 		final UnmodifiableLicense license = LicenseUtil.loadLicenseFileFromString( publicKey, licenseString, Optional.<byte[]>empty( ) );
-		assertThat( license.getValue( "myFeature.active" ), is( "true" ) );
+		assertThat( license.getValue( "myFeature.active" ) ).isEqualTo( "true" );
 	}
 
 	@Test
@@ -193,7 +191,7 @@ public final class LicenseUtilTest {
 		final String licenseString = new String( licenseArray, LICENSE_ENCODING_CHARSET );
 
 		final UnmodifiableLicense license = LicenseUtil.loadLicenseFileWithoutValidationFromString( licenseString );
-		assertThat( license.getValue( "myFeature.active" ), is( "false" ) );
+		assertThat( license.getValue( "myFeature.active" ) ).isEqualTo( "false" );
 	}
 
 	@Test
