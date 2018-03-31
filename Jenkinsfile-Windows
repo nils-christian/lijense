@@ -15,7 +15,7 @@ pipeline {
 		
 		stage('Build') {
 			steps {
-				bat 'docker run -v %WORKSPACE%:/workspace -w /workspace %DOCKER_IMAGE% /bin/bash -c "mvn clean package"'
+				bat 'docker run -v %WORKSPACE%:/workspace -v %TEMP%/.m2:/root/.m2 -w /workspace %DOCKER_IMAGE% /bin/bash -c "mvn clean package"'
 				archiveArtifacts artifacts: 'target/lijense-*.jar', fingerprint: true
 			}
 		}
