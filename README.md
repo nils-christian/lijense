@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nils-christian/lijense.svg?branch=master)](https://travis-ci.org/nils-christian/lijense)
+
 # liJense
 
 liJense is a small open-source framework to use licenses in your Java application. It uses RSA-based keys to sign and validate your license files.
