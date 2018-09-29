@@ -28,7 +28,9 @@ package de.rhocas.lijense.license;
 
 import static de.rhocas.lijense.Constants.DATE_FORMAT;
 import static de.rhocas.lijense.Constants.LICENSE_KEY_EXPIRATION_DATE;
+import static de.rhocas.lijense.Constants.LOCAL_DATE_FORMAT;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Properties;
 
@@ -187,6 +189,27 @@ public final class ModifiableLicense extends Properties {
 		final String value;
 		if ( aValue != null ) {
 			value = DATE_FORMAT.format( aValue );
+		} else {
+			value = null;
+		}
+
+		setValue( aKey, value );
+	}
+
+	/**
+	 * Sets the value for the given key.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aValue
+	 *            The value.
+	 *
+	 * @since 2.1.0
+	 */
+	public void setValue( final String aKey, final LocalDate aValue ) {
+		final String value;
+		if ( aValue != null ) {
+			value = LOCAL_DATE_FORMAT.format( aValue );
 		} else {
 			value = null;
 		}

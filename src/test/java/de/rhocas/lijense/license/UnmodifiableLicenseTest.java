@@ -31,6 +31,7 @@ import static de.rhocas.lijense.Constants.LICENSE_KEY_EXPIRATION_DATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -179,6 +180,19 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueLocalDate( ) throws ParseException {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "2000-12-01" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		final LocalDate date = license.getValueAsLocalDate( "key", null );
+
+		assertThat( date.getYear( ) ).isEqualTo( 2000 );
+		assertThat( date.getMonth( ) ).isEqualTo( 12 );
+		assertThat( date.getDayOfMonth( ) ).isEqualTo( 1 );
+	}
+
+	@Test
 	@SuppressWarnings ( "deprecation" )
 	public void testGetValueDateDefault( ) throws ParseException {
 		final Date defaultDate = new Date( );
@@ -192,6 +206,18 @@ public class UnmodifiableLicenseTest {
 		assertThat( date.getYear( ) ).isEqualTo( 2000 - 1900 );
 		assertThat( date.getMonth( ) ).isEqualTo( 12 - 1 );
 		assertThat( date.getDate( ) ).isEqualTo( 1 );
+	}
+
+	@Test
+	public void testGetValueLocalDateDefault( ) throws ParseException {
+		final LocalDate defaultDate = LocalDate.of( 2000, 12, 1 );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		final LocalDate date = license.getValueAsLocalDate( "key", defaultDate );
+
+		assertThat( date.getYear( ) ).isEqualTo( 2000 );
+		assertThat( date.getMonth( ) ).isEqualTo( 12 );
+		assertThat( date.getDayOfMonth( ) ).isEqualTo( 1 );
 	}
 
 	@Test

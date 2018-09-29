@@ -28,6 +28,7 @@ package de.rhocas.lijense.license;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -121,6 +122,25 @@ public final class ModifiableLicenseTest {
 		final ModifiableLicense license = new ModifiableLicense( );
 
 		license.setValue( "key", (Date) null );
+
+		assertThat( license.get( "key" ) ).isNull( );
+	}
+
+	@Test
+	public void testSetValueLocalDate1( ) {
+		final ModifiableLicense license = new ModifiableLicense( );
+		final LocalDate localDate = LocalDate.of( 2000, 12, 1 );
+
+		license.setValue( "key", localDate );
+
+		assertThat( license.get( "key" ) ).isEqualTo( "2000-12-01" );
+	}
+
+	@Test
+	public void testSetValueLocalDate2( ) {
+		final ModifiableLicense license = new ModifiableLicense( );
+
+		license.setValue( "key", (LocalDate) null );
 
 		assertThat( license.get( "key" ) ).isNull( );
 	}

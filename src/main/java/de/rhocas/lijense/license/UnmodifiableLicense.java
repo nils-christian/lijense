@@ -28,8 +28,11 @@ package de.rhocas.lijense.license;
 
 import static de.rhocas.lijense.Constants.DATE_FORMAT;
 import static de.rhocas.lijense.Constants.LICENSE_KEY_EXPIRATION_DATE;
+import static de.rhocas.lijense.Constants.LOCAL_DATE_FORMAT;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -301,6 +304,32 @@ public final class UnmodifiableLicense {
 
 		if ( value != null && !value.isEmpty( ) ) {
 			return DATE_FORMAT.parse( value );
+		} else {
+			return aDefault;
+		}
+	}
+
+	/**
+	 * Returns the value for the given key as local date. If the key is not available or the value is {@code null} or empty, the given default value will be returned
+	 * instead.
+	 *
+	 * @param aKey
+	 *            The key.
+	 * @param aDefault
+	 *            The default value.
+	 *
+	 * @return The value for the key or the default value.
+	 *
+	 * @throws DateTimeParseException
+	 *             If the date could not be parsed.
+	 *
+	 * @since 2.1.0
+	 */
+	public LocalDate getValueAsLocalDate( final String aKey, final LocalDate aDefault ) throws DateTimeParseException {
+		final String value = getValue( aKey );
+
+		if ( value != null && !value.isEmpty( ) ) {
+			return LocalDate.from( LOCAL_DATE_FORMAT.parse( value ) );
 		} else {
 			return aDefault;
 		}

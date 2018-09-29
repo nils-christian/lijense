@@ -29,6 +29,7 @@ package de.rhocas.lijense;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
@@ -95,6 +96,13 @@ public final class Constants {
 	 * @since 1.0.0
 	 */
 	public static final DateFormat DATE_FORMAT = new SimpleDateFormat( "yyyy-MM-dd", Locale.ENGLISH );
+
+	/**
+	 * This is the date format used to encode and parse local dates in the license file.
+	 *
+	 * @since 2.1.0
+	 */
+	public static final DateTimeFormatter LOCAL_DATE_FORMAT = DateTimeFormatter.ofPattern( "yyy-MM-dd", Locale.ENGLISH );
 
 	/**
 	 * This is the key for the expiration date in the license file.
