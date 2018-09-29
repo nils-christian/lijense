@@ -51,13 +51,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "42" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsByte( "key", (byte) 0 ) ).isEqualTo( (byte) 42 );
+		assertThat( license.getValueAsByte( "key", ( byte ) 0 ) ).isEqualTo( ( byte ) 42 );
 	}
 
 	@Test
 	public void testGetValueByteDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsByte( "key", (byte) 1 ) ).isEqualTo( (byte) 1 );
+		assertThat( license.getValueAsByte( "key", ( byte ) 1 ) ).isEqualTo( ( byte ) 1 );
 	}
 
 	@Test
@@ -66,13 +66,13 @@ public class UnmodifiableLicenseTest {
 		map.put( "key", "42" );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( map );
-		assertThat( license.getValueAsShort( "key", (short) 0 ) ).isEqualTo( (short) 42 );
+		assertThat( license.getValueAsShort( "key", ( short ) 0 ) ).isEqualTo( ( short ) 42 );
 	}
 
 	@Test
 	public void testGetValueShortDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
-		assertThat( license.getValueAsShort( "key", (short) 1 ) ).isEqualTo( (short) 1 );
+		assertThat( license.getValueAsShort( "key", ( short ) 1 ) ).isEqualTo( ( short ) 1 );
 	}
 
 	@Test
@@ -166,7 +166,7 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
-	@SuppressWarnings ( "deprecation" )
+	@SuppressWarnings( "deprecation" )
 	public void testGetValueDate( ) throws ParseException {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "2000-12-01" );
@@ -188,12 +188,12 @@ public class UnmodifiableLicenseTest {
 		final LocalDate date = license.getValueAsLocalDate( "key", null );
 
 		assertThat( date.getYear( ) ).isEqualTo( 2000 );
-		assertThat( date.getMonth( ) ).isEqualTo( 12 );
+		assertThat( date.getMonthValue( ) ).isEqualTo( 12 );
 		assertThat( date.getDayOfMonth( ) ).isEqualTo( 1 );
 	}
 
 	@Test
-	@SuppressWarnings ( "deprecation" )
+	@SuppressWarnings( "deprecation" )
 	public void testGetValueDateDefault( ) throws ParseException {
 		final Date defaultDate = new Date( );
 		defaultDate.setYear( 2000 - 1900 );
@@ -216,7 +216,7 @@ public class UnmodifiableLicenseTest {
 		final LocalDate date = license.getValueAsLocalDate( "key", defaultDate );
 
 		assertThat( date.getYear( ) ).isEqualTo( 2000 );
-		assertThat( date.getMonth( ) ).isEqualTo( 12 );
+		assertThat( date.getMonthValue( ) ).isEqualTo( 12 );
 		assertThat( date.getDayOfMonth( ) ).isEqualTo( 1 );
 	}
 
