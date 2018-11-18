@@ -1,4 +1,5 @@
 2.1.0 [?]
+* New methods for the license objects to store and load values as LocalDates.
 * New LicenseUtil methods to load the license content without validation
 
 2.0.0 [2017-12-21]
