@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/nils-christian/lijense.svg?branch=master)](https://travis-ci.org/nils-christian/lijense)
+[![Coverage](https://codecov.io/gh/nils-christian/lijense/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/nils-christian/lijense/branch/master)
 
 # liJense
 
