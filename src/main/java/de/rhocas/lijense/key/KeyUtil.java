@@ -49,6 +49,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
+import java.util.Objects;
 
 import de.rhocas.lijense.io.IOUtil;
 
@@ -62,7 +63,7 @@ import de.rhocas.lijense.io.IOUtil;
 public final class KeyUtil {
 
 	private KeyUtil( ) {
-		// Avoid instantiation
+		throw new AssertionError( "This util class must not be initialized." );
 	}
 
 	/**
@@ -94,16 +95,21 @@ public final class KeyUtil {
 	 * be created. Private keys are saved in the PKCS format, public keys in the X.509 format.
 	 *
 	 * @param aKey
-	 *            The key to be saved in the file.
+	 *            The key to be saved in the file. Must not be {@code null}.
 	 * @param aFile
-	 *            The target file for the key.
+	 *            The target file for the key. Must not be {@code null}.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while saving the key. This happens usually only if an IO error occurs.
+	 * @throws NullPointerException
+	 * 	           If the given key or the given file is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static void saveKeyToFile( final Key aKey, final File aFile ) throws KeyException {
+		Objects.requireNonNull( aKey, "The key must not be null." );
+		Objects.requireNonNull( aFile, "The file must not be null." );
+
 		try {
 			final byte[] encodedKey = aKey.getEncoded( );
 			final byte[] base64EncodedKey = IOUtil.binaryToBinaryString( encodedKey );
@@ -118,16 +124,20 @@ public final class KeyUtil {
 	 * This method loads a private key from the given Base64 encoded ASCII file.
 	 *
 	 * @param aFile
-	 *            The file which contains the private key.
+	 *            The file which contains the private key. Must not be {@code null}.
 	 *
 	 * @return The private key in the file.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while loading the key. This usually indicates an IO error or that the given file contains no valid private key.
+	 * @throws NullPointerException
+	 * 	           If the given file is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static PrivateKey loadPrivateKeyFromFile( final File aFile ) throws KeyException {
+		Objects.requireNonNull( aFile, "The file must not be null." );
+
 		try {
 			final byte[] base64EncodedKey = Files.readAllBytes( aFile.toPath( ) );
 			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
@@ -142,16 +152,20 @@ public final class KeyUtil {
 	 * This method loads a private key from the given stream. It is assumed that the stream contains Base64 encoded ASCII data. The stream is not closed.
 	 *
 	 * @param aStream
-	 *            The stream which contains the private key.
+	 *            The stream which contains the private key. Must not be {@code null}.
 	 *
 	 * @return The private key in the stream.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while loading the key. This usually indicates an IO error or that the given stream contains no valid private key.
+	 * @throws NullPointerException
+	 * 	           If the given stream is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static PrivateKey loadPrivateKeyFromStream( final InputStream aStream ) throws KeyException {
+		Objects.requireNonNull( aStream, "The stream must not be null." );
+
 		try {
 			final byte[] base64EncodedKey = IOUtil.readAllBytes( aStream );
 			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
@@ -166,16 +180,20 @@ public final class KeyUtil {
 	 * This method loads a private key from the given array. It is assumed that the key is available in binary (not Base64 encoded) data.
 	 *
 	 * @param aArray
-	 *            The array which contains the private key.
+	 *            The array which contains the private key. Must not be {@code null}.
 	 *
 	 * @return The private key in the array.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while loading the key. This usually indicates that the given array contains no valid private key.
+	 * @throws NullPointerException
+	 * 	           If the given array is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static PrivateKey loadPrivateKeyFromArray( final byte[] aArray ) throws KeyException {
+		Objects.requireNonNull( aArray, "The array must not be null." );
+
 		try {
 			final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec( aArray );
 			final KeyFactory keyFactory = KeyFactory.getInstance( KEY_ALGORITHM );
@@ -190,16 +208,20 @@ public final class KeyUtil {
 	 * This method loads a public key from the given Base64 encoded ASCII file.
 	 *
 	 * @param aFile
-	 *            The file which contains the public key.
+	 *            The file which contains the public key. Must not be {@code null}.
 	 *
 	 * @return The public key in the file.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while loading the key. This usually indicates an IO error or that the given file contains no valid public key.
+	 * @throws NullPointerException
+	 * 	           If the given file is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static PublicKey loadPublicKeyFromFile( final File aFile ) throws KeyException {
+		Objects.requireNonNull( aFile, "The file must not be null." );
+
 		try {
 			final byte[] base64EncodedKey = Files.readAllBytes( aFile.toPath( ) );
 			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
@@ -214,16 +236,20 @@ public final class KeyUtil {
 	 * This method loads a public key from the given stream. It is assumed that the stream contains Base64 encoded ASCII data. The stream is not closed.
 	 *
 	 * @param aStream
-	 *            The stream which contains the public key.
+	 *            The stream which contains the public key. Must not be {@code null}.
 	 *
 	 * @return The public key in the stream.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while loading the key. This usually indicates an IO error or that the given stream contains no valid public key.
+	 * @throws NullPointerException
+	 * 	           If the given stream is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static PublicKey loadPublicKeyFromStream( final InputStream aStream ) throws KeyException {
+		Objects.requireNonNull( aStream, "The stream must not be null." );
+
 		try {
 			final byte[] base64EncodedKey = IOUtil.readAllBytes( aStream );
 			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
@@ -238,16 +264,20 @@ public final class KeyUtil {
 	 * This method loads a public key from the given array. It is assumed that the key is available in binary (not Base64 encoded) data.
 	 *
 	 * @param aArray
-	 *            The array which contains the public key.
+	 *            The array which contains the public key. Must not be {@code null}.
 	 *
 	 * @return The public key in the array.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while loading the key. This usually indicates that the given array contains no valid public key.
+	 * @throws NullPointerException
+	 * 	           If the given array is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static PublicKey loadPublicKeyFromArray( final byte[] aArray ) throws KeyException {
+		Objects.requireNonNull( aArray, "The array must not be null." );
+
 		try {
 			final X509EncodedKeySpec keySpec = new X509EncodedKeySpec( aArray );
 			final KeyFactory keyFactory = KeyFactory.getInstance( KEY_ALGORITHM );
@@ -262,16 +292,21 @@ public final class KeyUtil {
 	 * This method calculates the fingerprint for a given public key. This fingerprint can be used to check that a public key has not been tampered with.
 	 *
 	 * @param aPublicKey
-	 *            The public key for which the fingerprint should be calculated.
+	 *            The public key for which the fingerprint should be calculated. Must not be {@code null}.
+	 *
 	 * @return The fingerprint of the key.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while calculating the fingerprint. This usually indicates that the hash algorithm is not provided by the underlying
 	 *             Java runtime environment.
+	 * @throws NullPointerException
+	 * 	           If the given key is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static byte[] calculateFingerprint( final PublicKey aPublicKey ) throws KeyException {
+		Objects.requireNonNull( aPublicKey, "The key must not be null." );
+
 		try {
 			final MessageDigest messageDigest = MessageDigest.getInstance( FINGERPRINT_ALGORITHM );
 			return messageDigest.digest( aPublicKey.getEncoded( ) );
@@ -284,16 +319,21 @@ public final class KeyUtil {
 	 * This method calculates the fingerprint for a given public key. This fingerprint can be used to check that a public key has not been tampered with.
 	 *
 	 * @param aPublicKey
-	 *            The public key for which the fingerprint should be calculated.
+	 *            The public key for which the fingerprint should be calculated. Must not be {@code null}.
+	 *
 	 * @return The fingerprint of the key.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while calculating the fingerprint. This usually indicates that the hash algorithm is not provided by the underlying
 	 *             Java runtime environment or that the given array does not contain a valid public key.
+	 * @throws NullPointerException
+	 * 	           If the given key is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static byte[] calculateFingerprint( final byte[] aPublicKey ) throws KeyException {
+		Objects.requireNonNull( aPublicKey, "The key must not be null." );
+
 		final PublicKey publicKey = loadPublicKeyFromArray( aPublicKey );
 		return calculateFingerprint( publicKey );
 	}
@@ -302,18 +342,24 @@ public final class KeyUtil {
 	 * This method checks whether the given fingerprint is valid for the given public key.
 	 *
 	 * @param aPublicKey
-	 *            The public key for which the fingerprint should be checked.
+	 *            The public key for which the fingerprint should be checked. Must not be {@code null}.
 	 * @param aFingerprint
-	 *            The expected fingerprint.
+	 *            The expected fingerprint. Must not be {@code null}.
+	 *
 	 * @return true if and only if the expected and the actual fingerprint are matching.
 	 *
 	 * @throws KeyException
 	 *             If something went wrong while calculating the fingerprint. This usually indicates that the hash algorithm is not provided by the underlying
 	 *             Java runtime environment.
+	 * @throws NullPointerException
+	 * 	           If the given key or the fingerprint is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static boolean isFingerprintValid( final PublicKey aPublicKey, final byte[] aFingerprint ) throws KeyException {
+		Objects.requireNonNull( aPublicKey, "The key must not be null." );
+		Objects.requireNonNull( aFingerprint, "The fingerprint must not be null." );
+
 		final byte[] actualFingerprint = calculateFingerprint( aPublicKey );
 		return Arrays.equals( actualFingerprint, aFingerprint );
 	}

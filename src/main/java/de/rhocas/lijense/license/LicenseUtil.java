@@ -47,6 +47,7 @@ import java.security.SignatureException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
@@ -65,10 +66,10 @@ import de.rhocas.lijense.key.KeyUtil;
  *
  * @since 1.0.0
  */
-public class LicenseUtil {
+public final class LicenseUtil {
 
 	private LicenseUtil( ) {
-		// Avoid instantiation
+		throw new AssertionError( "This util class must not be initialized." );
 	}
 
 	/**
@@ -76,19 +77,24 @@ public class LicenseUtil {
 	 * private key.
 	 *
 	 * @param aLicense
-	 *            The license to be saved.
+	 *            The license to be saved. Must not be {@code null}.
 	 * @param aPrivateKey
-	 *            The private key for the signature.
+	 *            The private key for the signature. Must not be {@code null}.
 	 *
 	 * @return The new license file as Base64 encoded string.
 	 *
 	 * @throws LicenseException
 	 *             If something went wrong while creating the license. This indicated usually that the algorithms are not provided by the underlying Java
 	 *             runtime environment or that an IO error occurred.
+	 * @throws NullPointerException
+	 * 	           If the given license or the given key is {@code null}.
 	 *
 	 * @since 2.0.0
 	 */
 	public static String createLicenseFile( final ModifiableLicense aLicense, final PrivateKey aPrivateKey ) throws LicenseException {
+		Objects.requireNonNull( aLicense, "The license must not be null." );
+		Objects.requireNonNull( aPrivateKey, "The key must not be null." );
+
 		try {
 			// Store the license as binary content
 			final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream( );
@@ -127,19 +133,25 @@ public class LicenseUtil {
 	 * and is signed by using the given private key.
 	 *
 	 * @param aLicense
-	 *            The license to be saved.
+	 *            The license to be saved. Must not be {@code null}.
 	 * @param aPrivateKey
-	 *            The private key for the signature.
+	 *            The private key for the signature. Must not be {@code null}.
 	 * @param aFile
-	 *            The target file for the license file.
+	 *            The target file for the license file. Must not be {@code null}.
 	 *
 	 * @throws LicenseException
 	 *             If something went wrong while creating the license. This indicated usually that the algorithms are not provided by the underlying Java
 	 *             runtime environment or that an IO error occurred.
+	 * @throws NullPointerException
+	 * 	           If the given license, the given key, or the given file is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static void saveLicenseFile( final ModifiableLicense aLicense, final PrivateKey aPrivateKey, final File aFile ) throws LicenseException {
+		Objects.requireNonNull( aLicense, "The license must not be null." );
+		Objects.requireNonNull( aPrivateKey, "The key must not be null." );
+		Objects.requireNonNull( aFile, "The file must not be null." );
+
 		try {
 			final String encodedLicense = createLicenseFile( aLicense, aPrivateKey );
 			Files.write( aFile.toPath( ), encodedLicense.getBytes( LICENSE_ENCODING ), StandardOpenOption.CREATE );
@@ -153,11 +165,11 @@ public class LicenseUtil {
 	 * with the fingerprint. It is strongly recommended to use this fingerprint in production environment.
 	 *
 	 * @param aPublicKey
-	 *            The public key, which is used to check the digital signature.
+	 *            The public key, which is used to check the digital signature. Must not be {@code null}.
 	 * @param aFile
-	 *            The license file.
+	 *            The license file. Must not be {@code null}.
 	 * @param aFingerprint
-	 *            The expected fingerprint of the public key.
+	 *            The expected fingerprint of the public key. Must not be {@code null}.
 	 *
 	 * @return The license content.
 	 *
@@ -165,10 +177,16 @@ public class LicenseUtil {
 	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment, that
 	 *             an IO error occurred, that the actual fingerprint of the public key does not match the expected fingerprint or that the digital signature of
 	 *             the license file is not valid.
+	 * @throws NullPointerException
+	 * 	           If the given key, the given file, or the given fingerprint is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
 	public static UnmodifiableLicense loadLicenseFile( final PublicKey aPublicKey, final File aFile, final Optional<byte[]> aFingerprint ) throws LicenseException {
+		Objects.requireNonNull( aPublicKey, "The key must not be null." );
+		Objects.requireNonNull( aFile, "The file must not be null." );
+		Objects.requireNonNull( aFingerprint, "The fingerprint must not be null." );
+
 		try {
 			return loadLicenseFileFromInputStream( aPublicKey, new FileInputStream( aFile ), aFingerprint );
 		} catch ( final FileNotFoundException ex ) {
@@ -180,17 +198,21 @@ public class LicenseUtil {
 	 * This method loads the license from the given file, but does not verify it. This method should usually not be used in production environment.
 	 *
 	 * @param aFile
-	 *            The license file.
+	 *            The license file. Must not be {@code null}.
 	 *
 	 * @return The license content.
 	 *
 	 * @throws LicenseException
 	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment or
 	 *             that an IO error occurred.
+	 * @throws NullPointerException
+	 * 	           If the given file is {@code null}.
 	 *
 	 * @since 2.1.0
 	 */
 	public static UnmodifiableLicense loadLicenseFileWithoutValidation( final File aFile ) throws LicenseException {
+		Objects.requireNonNull( aFile, "The file must not be null." );
+
 		try {
 			return loadLicenseFileWithoutValidationFromInputStream( new FileInputStream( aFile ) );
 		} catch ( final FileNotFoundException ex ) {
@@ -203,11 +225,11 @@ public class LicenseUtil {
 	 * verify the public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment.
 	 *
 	 * @param aPublicKey
-	 *            The public key, which is used to check the digital signature.
+	 *            The public key, which is used to check the digital signature. Must not be {@code null}.
 	 * @param aString
-	 *            The string.
+	 *            The string. Must not be {@code null}.
 	 * @param aFingerprint
-	 *            The expected fingerprint of the public key.
+	 *            The expected fingerprint of the public key. Must not be {@code null}.
 	 *
 	 * @return The license content.
 	 *
@@ -215,10 +237,16 @@ public class LicenseUtil {
 	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment, that
 	 *             an IO error occurred, that the actual fingerprint of the public key does not match the expected fingerprint or that the digital signature of
 	 *             the license file is not valid.
+	 * @throws NullPointerException
+	 * 	           If the given key, the given string, or the given fingerprint is {@code null}.
 	 *
 	 * @since 2.0.0
 	 */
 	public static UnmodifiableLicense loadLicenseFileFromString( final PublicKey aPublicKey, final String aString, final Optional<byte[]> aFingerprint ) throws LicenseException {
+		Objects.requireNonNull( aPublicKey, "The key must not be null." );
+		Objects.requireNonNull( aString, "The string must not be null." );
+		Objects.requireNonNull( aFingerprint, "The fingerprint must not be null." );
+
 		final byte[] stringBytes = aString.getBytes( LICENSE_ENCODING_CHARSET );
 		return loadLicenseFileFromInputStream( aPublicKey, new ByteArrayInputStream( stringBytes ), aFingerprint );
 	}
@@ -228,17 +256,21 @@ public class LicenseUtil {
 	 * environment.
 	 *
 	 * @param aString
-	 *            The string.
+	 *            The string. Must not be {@code null}.
 	 *
 	 * @return The license content.
 	 *
 	 * @throws LicenseException
 	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment or
 	 *             that an IO error occurred.
+	 * @throws NullPointerException
+	 * 	           If the given string is {@code null}.
 	 *
 	 * @since 2.1.0
 	 */
 	public static UnmodifiableLicense loadLicenseFileWithoutValidationFromString( final String aString ) throws LicenseException {
+		Objects.requireNonNull( aString, "The string must not be null." );
+
 		final byte[] stringBytes = aString.getBytes( LICENSE_ENCODING_CHARSET );
 		return loadLicenseFileWithoutValidationFromInputStream( new ByteArrayInputStream( stringBytes ) );
 	}
@@ -248,11 +280,11 @@ public class LicenseUtil {
 	 * public key with the fingerprint. It is strongly recommended to use this fingerprint in production environment. The stream is closed afterwards.
 	 *
 	 * @param aPublicKey
-	 *            The public key, which is used to check the digital signature.
+	 *            The public key, which is used to check the digital signature. Must not be {@code null}.
 	 * @param aStream
-	 *            The input stream.
+	 *            The input stream. Must not be {@code null}.
 	 * @param aFingerprint
-	 *            The expected fingerprint of the public key.
+	 *            The expected fingerprint of the public key. Must not be {@code null}.
 	 *
 	 * @return The license content.
 	 *
@@ -260,11 +292,16 @@ public class LicenseUtil {
 	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment, that
 	 *             an IO error occurred, that the actual fingerprint of the public key does not match the expected fingerprint or that the digital signature of
 	 *             the license file is not valid.
+	 * @throws NullPointerException
+	 * 	           If the given key, the given stream, or the given fingerprint is {@code null}.
 	 *
 	 * @since 1.0.0
 	 */
-	public static UnmodifiableLicense loadLicenseFileFromInputStream( final PublicKey aPublicKey, final InputStream aStream, final Optional<byte[]> aFingerprint )
-			throws LicenseException {
+	public static UnmodifiableLicense loadLicenseFileFromInputStream( final PublicKey aPublicKey, final InputStream aStream, final Optional<byte[]> aFingerprint ) throws LicenseException {
+		Objects.requireNonNull( aPublicKey, "The key must not be null." );
+		Objects.requireNonNull( aStream, "The stream must not be null." );
+		Objects.requireNonNull( aFingerprint, "The fingerprint must not be null." );
+
 		return loadLicenseFileFromInputStream( Optional.of( aPublicKey ), aStream, aFingerprint, true );
 	}
 
@@ -273,22 +310,25 @@ public class LicenseUtil {
 	 * stream is closed afterwards.
 	 *
 	 * @param aStream
-	 *            The input stream.
+	 *            The input stream. Must not be {@code null}.
 	 *
 	 * @return The license content.
 	 *
 	 * @throws LicenseException
 	 *             If the license could not be loaded. This could indicate that the algorithms are not provided by the underlying Java runtime environment or
 	 *             that an IO error occurred.
+	 * @throws NullPointerException
+	 * 	           If the given stream is {@code null}.
 	 *
 	 * @since 2.1.0
 	 */
 	public static UnmodifiableLicense loadLicenseFileWithoutValidationFromInputStream( final InputStream aStream ) throws LicenseException {
+		Objects.requireNonNull( aStream, "The stream must not be null." );
+
 		return loadLicenseFileFromInputStream( Optional.empty( ), aStream, Optional.empty( ), false );
 	}
 
-	private static UnmodifiableLicense loadLicenseFileFromInputStream( final Optional<PublicKey> aPublicKey, final InputStream aStream, final Optional<byte[]> aFingerprint,
-			final boolean aCheckValidity ) throws LicenseException {
+	private static UnmodifiableLicense loadLicenseFileFromInputStream( final Optional<PublicKey> aPublicKey, final InputStream aStream, final Optional<byte[]> aFingerprint, final boolean aCheckValidity ) throws LicenseException {
 		try {
 			// Check the fingerprint of the public key - if necessary
 			if ( aFingerprint.isPresent( ) && aCheckValidity ) {
