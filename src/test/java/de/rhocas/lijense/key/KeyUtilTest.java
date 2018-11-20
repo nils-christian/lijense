@@ -27,6 +27,7 @@
 package de.rhocas.lijense.key;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,9 +35,11 @@ import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 /**
@@ -48,6 +51,9 @@ public final class KeyUtilTest {
 
 	@Rule
 	public TemporaryFolder ivTemporaryFolder = new TemporaryFolder( );
+
+	@Rule
+	public ExpectedException ivExpectedException = ExpectedException.none( );
 
 	@Test
 	public void testKeyGeneration( ) throws KeyException {
@@ -192,6 +198,42 @@ public final class KeyUtilTest {
 
 		// Compare the keys
 		assertThat( originalPublicKey.getEncoded( ) ).isEqualTo( loadedPublicKey.getEncoded( ) );
+	}
+
+	@Test
+	public void testLoadPrivateKeyFromArrayWithInvalidKey( ) throws KeyException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not load the key" );
+		ivExpectedException.expectCause( instanceOf( InvalidKeySpecException.class ) );
+
+		KeyUtil.loadPrivateKeyFromArray( new byte[0] );
+	}
+
+	@Test
+	public void testLoadPublicKeyFromArrayWithInvalidKey( ) throws KeyException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not load the key" );
+		ivExpectedException.expectCause( instanceOf( InvalidKeySpecException.class ) );
+
+		KeyUtil.loadPublicKeyFromArray( new byte[0] );
+	}
+
+	@Test
+	public void testLoadPrivateKeyFromStreamWithInvalidKey( ) throws KeyException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not load the key" );
+		ivExpectedException.expectCause( instanceOf( InvalidKeySpecException.class ) );
+
+		KeyUtil.loadPrivateKeyFromStream( loadResourceAsStream( "empty.file" ) );
+	}
+
+	@Test
+	public void testLoadPublicKeyFromStreamWithInvalidKey( ) throws KeyException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not load the key" );
+		ivExpectedException.expectCause( instanceOf( InvalidKeySpecException.class ) );
+
+		KeyUtil.loadPublicKeyFromStream( loadResourceAsStream( "empty.file" ) );
 	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {

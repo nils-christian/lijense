@@ -28,9 +28,11 @@ package de.rhocas.lijense.license;
 
 import static de.rhocas.lijense.Constants.LICENSE_ENCODING_CHARSET;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyPair;
@@ -203,6 +205,28 @@ public final class LicenseUtilTest {
 		ivExpectedException.expect( LicenseException.class );
 		ivExpectedException.expectMessage( "Could not load the license" );
 		LicenseUtil.loadLicenseFileWithoutValidationFromString( licenseString );
+	}
+
+	@Test
+	public void testloadLicenseFileWithInvalidFile( ) throws KeyException, LicenseException {
+		final InputStream keyInputStream = loadResourceAsStream( "key.public" );
+		final PublicKey publicKey = KeyUtil.loadPublicKeyFromStream( keyInputStream );
+		final File nonExistingFile = new File( "notExisting" );
+
+		ivExpectedException.expect( LicenseException.class );
+		ivExpectedException.expectMessage( "Could not load the license" );
+		ivExpectedException.expectCause( instanceOf( FileNotFoundException.class ) );
+		LicenseUtil.loadLicenseFile( publicKey, nonExistingFile, Optional.empty( ) );
+	}
+
+	@Test
+	public void loadLicenseFileWithoutValidationWithInvalidFile( ) throws LicenseException {
+		final File nonExistingFile = new File( "notExisting" );
+
+		ivExpectedException.expect( LicenseException.class );
+		ivExpectedException.expectMessage( "Could not load the license" );
+		ivExpectedException.expectCause( instanceOf( FileNotFoundException.class ) );
+		LicenseUtil.loadLicenseFileWithoutValidation( nonExistingFile );
 	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {
