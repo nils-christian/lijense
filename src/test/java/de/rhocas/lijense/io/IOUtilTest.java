@@ -27,11 +27,16 @@
 package de.rhocas.lijense.io;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Unit test for {@link IOUtil}.
@@ -39,6 +44,9 @@ import org.junit.Test;
  * @author Nils Christian Ehmke
  */
 public final class IOUtilTest {
+
+	@Rule
+	public ExpectedException ivExpectedException = ExpectedException.none( );
 
 	@Test
 	public void testReadAllBytes( ) throws IOException {
@@ -75,6 +83,16 @@ public final class IOUtilTest {
 	@Test
 	public void testBinaryStringToBinary( ) {
 		assertThat( IOUtil.binaryStringToBinary( "bGlKZW5zZQ==".getBytes( ) ) ).isEqualTo( "liJense".getBytes( ) );
+	}
+
+	@Test
+	public void testConstructor( ) throws ReflectiveOperationException {
+		final Constructor<IOUtil> constructor = IOUtil.class.getDeclaredConstructor( );
+		constructor.setAccessible( true );
+
+		ivExpectedException.expect( InvocationTargetException.class );
+		ivExpectedException.expectCause( instanceOf( AssertionError.class ) );
+		constructor.newInstance( );
 	}
 
 }

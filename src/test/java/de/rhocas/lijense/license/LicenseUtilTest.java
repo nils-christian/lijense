@@ -35,6 +35,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -231,6 +233,16 @@ public final class LicenseUtilTest {
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {
 		return KeyUtilTest.class.getClassLoader( ).getResourceAsStream( aResourceName );
+	}
+
+	@Test
+	public void testConstructor( ) throws ReflectiveOperationException {
+		final Constructor<LicenseUtil> constructor = LicenseUtil.class.getDeclaredConstructor( );
+		constructor.setAccessible( true );
+
+		ivExpectedException.expect( InvocationTargetException.class );
+		ivExpectedException.expectCause( instanceOf( AssertionError.class ) );
+		constructor.newInstance( );
 	}
 
 }

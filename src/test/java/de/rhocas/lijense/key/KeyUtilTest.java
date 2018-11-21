@@ -32,6 +32,8 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -238,6 +240,16 @@ public final class KeyUtilTest {
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {
 		return KeyUtilTest.class.getClassLoader( ).getResourceAsStream( aResourceName );
+	}
+
+	@Test
+	public void testConstructor( ) throws ReflectiveOperationException {
+		final Constructor<KeyUtil> constructor = KeyUtil.class.getDeclaredConstructor( );
+		constructor.setAccessible( true );
+
+		ivExpectedException.expect( InvocationTargetException.class );
+		ivExpectedException.expectCause( instanceOf( AssertionError.class ) );
+		constructor.newInstance( );
 	}
 
 }
