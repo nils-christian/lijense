@@ -231,8 +231,15 @@ public final class LicenseUtilTest {
 		LicenseUtil.loadLicenseFileWithoutValidation( nonExistingFile );
 	}
 
-	private InputStream loadResourceAsStream( final String aResourceName ) {
-		return KeyUtilTest.class.getClassLoader( ).getResourceAsStream( aResourceName );
+	@Test
+	public void testSaveLicenseFileWithInvalidFile( ) throws KeyException, LicenseException {
+		final InputStream keyInputStream = loadResourceAsStream( "key.private" );
+		final PrivateKey privateKey = KeyUtil.loadPrivateKeyFromStream( keyInputStream );
+
+		ivExpectedException.expect( LicenseException.class );
+		ivExpectedException.expectMessage( "Could not save the license" );
+		ivExpectedException.expectCause( instanceOf( IOException.class ) );
+		LicenseUtil.saveLicenseFile( new ModifiableLicense( ), privateKey, new File( "" ) );
 	}
 
 	@Test
@@ -243,6 +250,11 @@ public final class LicenseUtilTest {
 		ivExpectedException.expect( InvocationTargetException.class );
 		ivExpectedException.expectCause( instanceOf( AssertionError.class ) );
 		constructor.newInstance( );
+	}
+
+
+	private InputStream loadResourceAsStream( final String aResourceName ) {
+		return KeyUtilTest.class.getClassLoader( ).getResourceAsStream( aResourceName );
 	}
 
 }

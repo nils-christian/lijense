@@ -28,6 +28,9 @@ package de.rhocas.lijense.key;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -238,8 +241,56 @@ public final class KeyUtilTest {
 		KeyUtil.loadPublicKeyFromStream( loadResourceAsStream( "empty.file" ) );
 	}
 
-	private InputStream loadResourceAsStream( final String aResourceName ) {
-		return KeyUtilTest.class.getClassLoader( ).getResourceAsStream( aResourceName );
+
+	@Test
+	public void testLoadPrivateKeyFromFileWithNonExistingFile( ) throws KeyException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not load the key" );
+		ivExpectedException.expectCause( instanceOf( IOException.class ) );
+
+		KeyUtil.loadPrivateKeyFromFile( new File( "non.existing.file" ) );
+	}
+
+	@Test
+	public void testLoadPublicKeyFromFileWithNonExistingFile( ) throws KeyException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not load the key" );
+		ivExpectedException.expectCause( instanceOf( IOException.class ) );
+
+		KeyUtil.loadPublicKeyFromFile( new File( "non.existing.file" ) );
+	}
+
+	@Test
+	public void testLoadPrivateKeyFromStreamWithInvalidStream( ) throws KeyException, IOException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not load the key" );
+		ivExpectedException.expectCause( instanceOf( IOException.class ) );
+
+		final InputStream stream = mock(InputStream.class);
+		when( stream.read(any( ) ) ).thenThrow( IOException.class );
+		KeyUtil.loadPrivateKeyFromStream(  stream );
+	}
+
+	@Test
+	public void testLoadPublicKeyFromStreamWithInvalidStream( ) throws KeyException, IOException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not load the key" );
+		ivExpectedException.expectCause( instanceOf( IOException.class ) );
+
+		final InputStream stream = mock(InputStream.class);
+		when( stream.read(any( ) ) ).thenThrow( IOException.class );
+		KeyUtil.loadPublicKeyFromStream( stream );
+	}
+
+	@Test
+	public void testSavePublicKeyWithInvalidFile( ) throws KeyException, IOException {
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not save the key" );
+		ivExpectedException.expectCause( instanceOf( IOException.class ) );
+
+		final KeyPair keyPair = KeyUtil.generateNewKeyPair( );
+		final PublicKey originalPublicKey = keyPair.getPublic( );
+		KeyUtil.saveKeyToFile( originalPublicKey, new File( "" ) );
 	}
 
 	@Test
@@ -250,6 +301,10 @@ public final class KeyUtilTest {
 		ivExpectedException.expect( InvocationTargetException.class );
 		ivExpectedException.expectCause( instanceOf( AssertionError.class ) );
 		constructor.newInstance( );
+	}
+
+	private InputStream loadResourceAsStream( final String aResourceName ) {
+		return KeyUtilTest.class.getClassLoader( ).getResourceAsStream( aResourceName );
 	}
 
 }
