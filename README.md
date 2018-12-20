@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/nils-christian/lijense.svg?branch=master)](https://travis-ci.org/nils-christian/lijense)
 [![Coverage](https://codecov.io/gh/nils-christian/lijense/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/nils-christian/lijense/branch/master)
 [![codebeat badge](https://codebeat.co/badges/2fab2d6f-e787-4b77-88a1-40daf5e92e54)](https://codebeat.co/projects/github-com-nils-christian-lijense-master)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # liJense
 
