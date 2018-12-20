@@ -136,16 +136,8 @@ public final class KeyUtil {
 	 * @since 1.0.0
 	 */
 	public static PrivateKey loadPrivateKeyFromFile( final File aFile ) throws KeyException {
-		Objects.requireNonNull( aFile, "The file must not be null." );
-
-		try {
-			final byte[] base64EncodedKey = Files.readAllBytes( aFile.toPath( ) );
-			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
-
-			return loadPrivateKeyFromArray( encodedKey );
-		} catch ( final IOException ex ) {
-			throw new KeyException( "Could not load the key", ex );
-		}
+		final byte[] encodedKey = loadByteArrayFromFile( aFile );
+		return loadPrivateKeyFromArray( encodedKey );
 	}
 
 	/**
@@ -213,13 +205,16 @@ public final class KeyUtil {
 	 * @since 1.0.0
 	 */
 	public static PublicKey loadPublicKeyFromFile( final File aFile ) throws KeyException {
+		final byte[] encodedKey = loadByteArrayFromFile( aFile );
+		return loadPublicKeyFromArray( encodedKey );
+	}
+
+	private static byte[] loadByteArrayFromFile( final File aFile ) throws KeyException {
 		Objects.requireNonNull( aFile, "The file must not be null." );
 
 		try {
 			final byte[] base64EncodedKey = Files.readAllBytes( aFile.toPath( ) );
-			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
-
-			return loadPublicKeyFromArray( encodedKey );
+			return IOUtil.binaryStringToBinary( base64EncodedKey );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not load the key", ex );
 		}
