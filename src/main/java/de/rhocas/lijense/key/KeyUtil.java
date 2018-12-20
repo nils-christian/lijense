@@ -164,17 +164,10 @@ public final class KeyUtil {
 	 * @since 1.0.0
 	 */
 	public static PrivateKey loadPrivateKeyFromStream( final InputStream aStream ) throws KeyException {
-		Objects.requireNonNull( aStream, "The stream must not be null." );
-
-		try {
-			final byte[] base64EncodedKey = IOUtil.readAllBytes( aStream );
-			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
-
-			return loadPrivateKeyFromArray( encodedKey );
-		} catch ( final IOException ex ) {
-			throw new KeyException( "Could not load the key", ex );
-		}
+		final byte[] encodedKey = loadByteArrayFromStream(aStream);
+		return loadPrivateKeyFromArray( encodedKey );
 	}
+
 
 	/**
 	 * This method loads a private key from the given array. It is assumed that the key is available in binary (not Base64 encoded) data.
@@ -248,13 +241,16 @@ public final class KeyUtil {
 	 * @since 1.0.0
 	 */
 	public static PublicKey loadPublicKeyFromStream( final InputStream aStream ) throws KeyException {
+		final byte[] byteArray = loadByteArrayFromStream(aStream);
+		return loadPublicKeyFromArray( byteArray );
+	}
+
+	private static byte[] loadByteArrayFromStream( final InputStream aStream ) throws KeyException {
 		Objects.requireNonNull( aStream, "The stream must not be null." );
 
 		try {
-			final byte[] base64EncodedKey = IOUtil.readAllBytes( aStream );
-			final byte[] encodedKey = IOUtil.binaryStringToBinary( base64EncodedKey );
-
-			return loadPublicKeyFromArray( encodedKey );
+			final byte[] encodedKey = IOUtil.readAllBytes( aStream );
+			return IOUtil.binaryStringToBinary( encodedKey );
 		} catch ( final IOException ex ) {
 			throw new KeyException( "Could not load the key", ex );
 		}
