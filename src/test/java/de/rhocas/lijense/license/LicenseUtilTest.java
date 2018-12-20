@@ -29,6 +29,7 @@ package de.rhocas.lijense.license;
 import static de.rhocas.lijense.Constants.LICENSE_ENCODING_CHARSET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.mockito.Mockito.mock;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -37,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -210,7 +212,7 @@ public final class LicenseUtilTest {
 	}
 
 	@Test
-	public void testloadLicenseFileWithInvalidFile( ) throws KeyException, LicenseException {
+	public void testLoadLicenseFileWithInvalidFile( ) throws KeyException, LicenseException {
 		final InputStream keyInputStream = loadResourceAsStream( "key.public" );
 		final PublicKey publicKey = KeyUtil.loadPublicKeyFromStream( keyInputStream );
 		final File nonExistingFile = new File( "notExisting" );
@@ -252,6 +254,14 @@ public final class LicenseUtilTest {
 		constructor.newInstance( );
 	}
 
+	@Test
+	public void testCreateLicenseFileWithInvalidKey( ) throws LicenseException, IOException {
+		ivExpectedException.expect( LicenseException.class );
+		ivExpectedException.expectMessage( "Could not create the license" );
+		ivExpectedException.expectCause( instanceOf( InvalidKeyException.class ) );
+
+		LicenseUtil.createLicenseFile( new ModifiableLicense( ), mock( PrivateKey.class ) );
+	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {
 		return KeyUtilTest.class.getClassLoader( ).getResourceAsStream( aResourceName );

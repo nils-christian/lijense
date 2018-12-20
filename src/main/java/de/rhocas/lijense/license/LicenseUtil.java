@@ -331,7 +331,7 @@ public final class LicenseUtil {
 	private static UnmodifiableLicense loadLicenseFileFromInputStream( final Optional<PublicKey> aPublicKey, final InputStream aStream, final Optional<byte[]> aFingerprint, final boolean aCheckValidity ) throws LicenseException {
 		try {
 			// Check the fingerprint of the public key - if necessary
-			if ( aFingerprint.isPresent( ) && aCheckValidity ) {
+			if ( aFingerprint.isPresent( ) ) {
 				if ( !KeyUtil.isFingerprintValid( aPublicKey.get( ), aFingerprint.get( ) ) ) {
 					throw new LicenseException( "The actual fingerprint of the public key does not match the expected fingerprint." );
 				}
