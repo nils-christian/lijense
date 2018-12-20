@@ -61,6 +61,15 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueByteDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		assertThat( license.getValueAsByte( "key", ( byte ) 42 ) ).isEqualTo( ( byte ) 42 );
+	}
+
+	@Test
 	public void testGetValueShort( ) {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "42" );
@@ -72,6 +81,15 @@ public class UnmodifiableLicenseTest {
 	@Test
 	public void testGetValueShortDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsShort( "key", ( short ) 1 ) ).isEqualTo( ( short ) 1 );
+	}
+
+	@Test
+	public void testGetValueShortDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		assertThat( license.getValueAsShort( "key", ( short ) 1 ) ).isEqualTo( ( short ) 1 );
 	}
 
@@ -91,6 +109,15 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueIntDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		assertThat( license.getValueAsInt( "key", 1 ) ).isEqualTo( 1 );
+	}
+
+	@Test
 	public void testGetValueLong( ) {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "42" );
@@ -102,6 +129,15 @@ public class UnmodifiableLicenseTest {
 	@Test
 	public void testGetValueLongDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsLong( "key", 1L ) ).isEqualTo( 1L );
+	}
+
+	@Test
+	public void testGetValueLongDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		assertThat( license.getValueAsLong( "key", 1L ) ).isEqualTo( 1L );
 	}
 
@@ -121,6 +157,15 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueFloatDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		assertThat( license.getValueAsFloat( "key", 1.0f ) ).isEqualTo( 1.0f );
+	}
+
+	@Test
 	public void testGetValueDouble( ) {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "42.0" );
@@ -132,6 +177,15 @@ public class UnmodifiableLicenseTest {
 	@Test
 	public void testGetValueDoubleDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsDouble( "key", 1.0 ) ).isEqualTo( 1.0 );
+	}
+
+	@Test
+	public void testGetValueDoubleDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		assertThat( license.getValueAsDouble( "key", 1.0 ) ).isEqualTo( 1.0 );
 	}
 
@@ -151,6 +205,15 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	public void testGetValueBooleanDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		assertThat( license.getValueAsBoolean( "key", true ) ).isTrue( );
+	}
+
+	@Test
 	public void testGetValueChar( ) {
 		final Map<String, String> map = new HashMap<>( );
 		map.put( "key", "A" );
@@ -162,6 +225,15 @@ public class UnmodifiableLicenseTest {
 	@Test
 	public void testGetValueCharDefault( ) {
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		assertThat( license.getValueAsChar( "key", 'B' ) ).isEqualTo( 'B' );
+	}
+
+	@Test
+	public void testGetValueCharDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		assertThat( license.getValueAsChar( "key", 'B' ) ).isEqualTo( 'B' );
 	}
 
@@ -209,10 +281,44 @@ public class UnmodifiableLicenseTest {
 	}
 
 	@Test
+	@SuppressWarnings( "deprecation" )
+	public void testGetValueDateDefaultWhenEmpty( ) throws ParseException {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final Date defaultDate = new Date( );
+		defaultDate.setYear( 2000 - 1900 );
+		defaultDate.setMonth( 12 - 1 );
+		defaultDate.setDate( 1 );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
+		final Date date = license.getValueAsDate( "key", defaultDate );
+
+		assertThat( date.getYear( ) ).isEqualTo( 2000 - 1900 );
+		assertThat( date.getMonth( ) ).isEqualTo( 12 - 1 );
+		assertThat( date.getDate( ) ).isEqualTo( 1 );
+	}
+
+	@Test
 	public void testGetValueLocalDateDefault( ) throws ParseException {
 		final LocalDate defaultDate = LocalDate.of( 2000, 12, 1 );
 
 		final UnmodifiableLicense license = new UnmodifiableLicense( new HashMap<>( ) );
+		final LocalDate date = license.getValueAsLocalDate( "key", defaultDate );
+
+		assertThat( date.getYear( ) ).isEqualTo( 2000 );
+		assertThat( date.getMonthValue( ) ).isEqualTo( 12 );
+		assertThat( date.getDayOfMonth( ) ).isEqualTo( 1 );
+	}
+
+	@Test
+	public void testGetValueLocalDateDefaultWhenEmpty( ) {
+		final Map<String, String> map = new HashMap<>( );
+		map.put( "key", "" );
+
+		final LocalDate defaultDate = LocalDate.of( 2000, 12, 1 );
+
+		final UnmodifiableLicense license = new UnmodifiableLicense( map );
 		final LocalDate date = license.getValueAsLocalDate( "key", defaultDate );
 
 		assertThat( date.getYear( ) ).isEqualTo( 2000 );
