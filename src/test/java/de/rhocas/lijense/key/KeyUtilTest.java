@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -116,6 +117,19 @@ public final class KeyUtilTest {
 				-97, 54, -58, -38, 31, 102, 58, -122 };
 
 		assertThat( actualFingerprint ).isEqualTo( expectedFingerprint );
+	}
+	
+	@Test
+	public void testCalculateFingerprintWithError( ) throws KeyException {
+		// This is a hack, because it is very difficult to throw the NoSuchAlgorithmException. The getEncoded method
+		// usually does not throw this.
+		final PublicKey publicKey = mock( PublicKey.class );
+		when( publicKey.getEncoded( ) ).thenAnswer( invocation -> { throw new NoSuchAlgorithmException( ); } );
+		
+		ivExpectedException.expect( KeyException.class );
+		ivExpectedException.expectMessage( "Could not calculate the fingerprint of the public key");
+		ivExpectedException.expectCause( instanceOf( NoSuchAlgorithmException.class ) );
+		KeyUtil.calculateFingerprint( publicKey );
 	}
 
 	@Test
