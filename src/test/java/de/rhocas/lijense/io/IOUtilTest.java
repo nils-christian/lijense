@@ -27,16 +27,14 @@
 package de.rhocas.lijense.io;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  * Unit test for {@link IOUtil}.
@@ -44,9 +42,6 @@ import org.junit.rules.ExpectedException;
  * @author Nils Christian Ehmke
  */
 public final class IOUtilTest {
-
-	@Rule
-	public ExpectedException ivExpectedException = ExpectedException.none( );
 
 	@Test
 	public void testReadAllBytes( ) throws IOException {
@@ -60,7 +55,7 @@ public final class IOUtilTest {
 	private byte[] createAndFillBuffer( ) {
 		final byte[] buffer = new byte[2000];
 		for ( int i = 0; i < buffer.length; i++ ) {
-			buffer[i] = (byte) ( i % 256 );
+			buffer[i] = ( byte ) ( i % 256 );
 		}
 		return buffer;
 	}
@@ -90,9 +85,9 @@ public final class IOUtilTest {
 		final Constructor<IOUtil> constructor = IOUtil.class.getDeclaredConstructor( );
 		constructor.setAccessible( true );
 
-		ivExpectedException.expect( InvocationTargetException.class );
-		ivExpectedException.expectCause( instanceOf( AssertionError.class ) );
-		constructor.newInstance( );
+		assertThatExceptionOfType( InvocationTargetException.class )
+				.isThrownBy( constructor::newInstance )
+				.withCauseInstanceOf( AssertionError.class );
 	}
 
 }

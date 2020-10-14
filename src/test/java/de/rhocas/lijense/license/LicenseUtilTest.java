@@ -28,7 +28,7 @@ package de.rhocas.lijense.license;
 
 import static de.rhocas.lijense.Constants.LICENSE_ENCODING_CHARSET;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 
 import java.io.ByteArrayInputStream;
@@ -48,7 +48,6 @@ import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 import de.rhocas.lijense.io.IOUtil;
@@ -66,11 +65,8 @@ public final class LicenseUtilTest {
 	@Rule
 	public TemporaryFolder ivTemporaryFolder = new TemporaryFolder( );
 
-	@Rule
-	public ExpectedException ivExpectedException = ExpectedException.none( );
-
 	@Test
-	@SuppressWarnings ( "deprecation" )
+	@SuppressWarnings( "deprecation" )
 	public void testSaveAndLoadLicense( ) throws KeyException, LicenseException, IOException, ParseException {
 		final File targetFile = ivTemporaryFolder.newFile( );
 
@@ -92,7 +88,7 @@ public final class LicenseUtilTest {
 	}
 
 	@Test
-	@SuppressWarnings ( "deprecation" )
+	@SuppressWarnings( "deprecation" )
 	public void testSaveAndLoadLicenseWithoutValidation( ) throws KeyException, LicenseException, IOException, ParseException {
 		final File targetFile = ivTemporaryFolder.newFile( );
 
@@ -150,9 +146,9 @@ public final class LicenseUtilTest {
 
 		final InputStream licenseInputStream = loadResourceAsStream( "invalid.license" );
 
-		ivExpectedException.expect( LicenseException.class );
-		ivExpectedException.expectMessage( "The license is not valid" );
-		LicenseUtil.loadLicenseFileFromInputStream( publicKey, licenseInputStream, Optional.of( expectedFingerprint ) );
+		assertThatExceptionOfType( LicenseException.class )
+				.isThrownBy( ( ) -> LicenseUtil.loadLicenseFileFromInputStream( publicKey, licenseInputStream, Optional.of( expectedFingerprint ) ) )
+				.withMessage( "The license is not valid" );
 	}
 
 	@Test
@@ -172,9 +168,9 @@ public final class LicenseUtilTest {
 
 		final InputStream licenseInputStream = loadResourceAsStream( "valid.license" );
 
-		ivExpectedException.expect( LicenseException.class );
-		ivExpectedException.expectMessage( "The actual fingerprint of the public key does not match the expected fingerprint." );
-		LicenseUtil.loadLicenseFileFromInputStream( publicKey, licenseInputStream, Optional.of( expectedFingerprint ) );
+		assertThatExceptionOfType( LicenseException.class )
+				.isThrownBy( ( ) -> LicenseUtil.loadLicenseFileFromInputStream( publicKey, licenseInputStream, Optional.of( expectedFingerprint ) ) )
+				.withMessage( "The actual fingerprint of the public key does not match the expected fingerprint." );
 	}
 
 	@Test
@@ -206,9 +202,9 @@ public final class LicenseUtilTest {
 		final byte[] licenseArray = IOUtil.readAllBytes( licenseInputStream );
 		final String licenseString = new String( licenseArray, LICENSE_ENCODING_CHARSET );
 
-		ivExpectedException.expect( LicenseException.class );
-		ivExpectedException.expectMessage( "Could not load the license" );
-		LicenseUtil.loadLicenseFileWithoutValidationFromString( licenseString );
+		assertThatExceptionOfType( LicenseException.class )
+				.isThrownBy( ( ) -> LicenseUtil.loadLicenseFileWithoutValidationFromString( licenseString ) )
+				.withMessage( "Could not load the license" );
 	}
 
 	@Test
@@ -217,20 +213,20 @@ public final class LicenseUtilTest {
 		final PublicKey publicKey = KeyUtil.loadPublicKeyFromStream( keyInputStream );
 		final File nonExistingFile = new File( "notExisting" );
 
-		ivExpectedException.expect( LicenseException.class );
-		ivExpectedException.expectMessage( "Could not load the license" );
-		ivExpectedException.expectCause( instanceOf( FileNotFoundException.class ) );
-		LicenseUtil.loadLicenseFile( publicKey, nonExistingFile, Optional.empty( ) );
+		assertThatExceptionOfType( LicenseException.class )
+				.isThrownBy( ( ) -> LicenseUtil.loadLicenseFile( publicKey, nonExistingFile, Optional.empty( ) ) )
+				.withCauseInstanceOf( FileNotFoundException.class )
+				.withMessage( "Could not load the license" );
 	}
 
 	@Test
 	public void loadLicenseFileWithoutValidationWithInvalidFile( ) throws LicenseException {
 		final File nonExistingFile = new File( "notExisting" );
 
-		ivExpectedException.expect( LicenseException.class );
-		ivExpectedException.expectMessage( "Could not load the license" );
-		ivExpectedException.expectCause( instanceOf( FileNotFoundException.class ) );
-		LicenseUtil.loadLicenseFileWithoutValidation( nonExistingFile );
+		assertThatExceptionOfType( LicenseException.class )
+				.isThrownBy( ( ) -> LicenseUtil.loadLicenseFileWithoutValidation( nonExistingFile ) )
+				.withCauseInstanceOf( FileNotFoundException.class )
+				.withMessage( "Could not load the license" );
 	}
 
 	@Test
@@ -238,10 +234,10 @@ public final class LicenseUtilTest {
 		final InputStream keyInputStream = loadResourceAsStream( "key.private" );
 		final PrivateKey privateKey = KeyUtil.loadPrivateKeyFromStream( keyInputStream );
 
-		ivExpectedException.expect( LicenseException.class );
-		ivExpectedException.expectMessage( "Could not save the license" );
-		ivExpectedException.expectCause( instanceOf( IOException.class ) );
-		LicenseUtil.saveLicenseFile( new ModifiableLicense( ), privateKey, new File( "" ) );
+		assertThatExceptionOfType( LicenseException.class )
+				.isThrownBy( ( ) -> LicenseUtil.saveLicenseFile( new ModifiableLicense( ), privateKey, new File( "" ) ) )
+				.withCauseInstanceOf( IOException.class )
+				.withMessage( "Could not save the license" );
 	}
 
 	@Test
@@ -249,18 +245,17 @@ public final class LicenseUtilTest {
 		final Constructor<LicenseUtil> constructor = LicenseUtil.class.getDeclaredConstructor( );
 		constructor.setAccessible( true );
 
-		ivExpectedException.expect( InvocationTargetException.class );
-		ivExpectedException.expectCause( instanceOf( AssertionError.class ) );
-		constructor.newInstance( );
+		assertThatExceptionOfType( InvocationTargetException.class )
+				.isThrownBy( constructor::newInstance )
+				.withCauseInstanceOf( AssertionError.class );
 	}
 
 	@Test
 	public void testCreateLicenseFileWithInvalidKey( ) throws LicenseException, IOException {
-		ivExpectedException.expect( LicenseException.class );
-		ivExpectedException.expectMessage( "Could not create the license" );
-		ivExpectedException.expectCause( instanceOf( InvalidKeyException.class ) );
-
-		LicenseUtil.createLicenseFile( new ModifiableLicense( ), mock( PrivateKey.class ) );
+		assertThatExceptionOfType( LicenseException.class )
+				.isThrownBy( ( ) -> LicenseUtil.createLicenseFile( new ModifiableLicense( ), mock( PrivateKey.class ) ) )
+				.withCauseInstanceOf( InvalidKeyException.class )
+				.withMessage( "Could not create the license" );
 	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {

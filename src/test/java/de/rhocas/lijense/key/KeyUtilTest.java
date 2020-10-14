@@ -27,7 +27,7 @@
 package de.rhocas.lijense.key;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,7 +45,6 @@ import java.security.spec.InvalidKeySpecException;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 /**
@@ -57,9 +56,6 @@ public final class KeyUtilTest {
 
 	@Rule
 	public TemporaryFolder ivTemporaryFolder = new TemporaryFolder( );
-
-	@Rule
-	public ExpectedException ivExpectedException = ExpectedException.none( );
 
 	@Test
 	public void testKeyGeneration( ) throws KeyException {
@@ -118,18 +114,21 @@ public final class KeyUtilTest {
 
 		assertThat( actualFingerprint ).isEqualTo( expectedFingerprint );
 	}
-	
+
 	@Test
 	public void testCalculateFingerprintWithError( ) throws KeyException {
-		// This is a hack, because it is very difficult to throw the NoSuchAlgorithmException. The getEncoded method
+		// This is a hack, because it is very difficult to throw the
+		// NoSuchAlgorithmException. The getEncoded method
 		// usually does not throw this.
 		final PublicKey publicKey = mock( PublicKey.class );
-		when( publicKey.getEncoded( ) ).thenAnswer( invocation -> { throw new NoSuchAlgorithmException( ); } );
-		
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not calculate the fingerprint of the public key");
-		ivExpectedException.expectCause( instanceOf( NoSuchAlgorithmException.class ) );
-		KeyUtil.calculateFingerprint( publicKey );
+		when( publicKey.getEncoded( ) ).thenAnswer( invocation -> {
+			throw new NoSuchAlgorithmException( );
+		} );
+
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.calculateFingerprint( publicKey ) )
+				.withCauseInstanceOf( NoSuchAlgorithmException.class )
+				.withMessage( "Could not calculate the fingerprint of the public key" );
 	}
 
 	@Test
@@ -221,90 +220,84 @@ public final class KeyUtilTest {
 
 	@Test
 	public void testLoadPrivateKeyFromArrayWithInvalidKey( ) throws KeyException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not load the key" );
-		ivExpectedException.expectCause( instanceOf( InvalidKeySpecException.class ) );
-
-		KeyUtil.loadPrivateKeyFromArray( new byte[0] );
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.loadPrivateKeyFromArray( new byte[0] ) )
+				.withCauseInstanceOf( InvalidKeySpecException.class )
+				.withMessage( "Could not load the key" );
 	}
 
 	@Test
 	public void testLoadPublicKeyFromArrayWithInvalidKey( ) throws KeyException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not load the key" );
-		ivExpectedException.expectCause( instanceOf( InvalidKeySpecException.class ) );
-
-		KeyUtil.loadPublicKeyFromArray( new byte[0] );
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.loadPublicKeyFromArray( new byte[0] ) )
+				.withCauseInstanceOf( InvalidKeySpecException.class )
+				.withMessage( "Could not load the key" );
 	}
 
 	@Test
 	public void testLoadPrivateKeyFromStreamWithInvalidKey( ) throws KeyException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not load the key" );
-		ivExpectedException.expectCause( instanceOf( InvalidKeySpecException.class ) );
-
-		KeyUtil.loadPrivateKeyFromStream( loadResourceAsStream( "empty.file" ) );
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.loadPrivateKeyFromStream( loadResourceAsStream( "empty.file" ) ) )
+				.withCauseInstanceOf( InvalidKeySpecException.class )
+				.withMessage( "Could not load the key" );
 	}
 
 	@Test
 	public void testLoadPublicKeyFromStreamWithInvalidKey( ) throws KeyException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not load the key" );
-		ivExpectedException.expectCause( instanceOf( InvalidKeySpecException.class ) );
-
-		KeyUtil.loadPublicKeyFromStream( loadResourceAsStream( "empty.file" ) );
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.loadPublicKeyFromStream( loadResourceAsStream( "empty.file" ) ) )
+				.withCauseInstanceOf( InvalidKeySpecException.class )
+				.withMessage( "Could not load the key" );
 	}
-
 
 	@Test
 	public void testLoadPrivateKeyFromFileWithNonExistingFile( ) throws KeyException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not load the key" );
-		ivExpectedException.expectCause( instanceOf( IOException.class ) );
-
-		KeyUtil.loadPrivateKeyFromFile( new File( "non.existing.file" ) );
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.loadPrivateKeyFromFile( new File( "non.existing.file" ) ) )
+				.withCauseInstanceOf( IOException.class )
+				.withMessage( "Could not load the key" );
 	}
 
 	@Test
 	public void testLoadPublicKeyFromFileWithNonExistingFile( ) throws KeyException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not load the key" );
-		ivExpectedException.expectCause( instanceOf( IOException.class ) );
-
-		KeyUtil.loadPublicKeyFromFile( new File( "non.existing.file" ) );
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.loadPublicKeyFromFile( new File( "non.existing.file" ) ) )
+				.withCauseInstanceOf( IOException.class )
+				.withMessage( "Could not load the key" );
 	}
 
 	@Test
 	public void testLoadPrivateKeyFromStreamWithInvalidStream( ) throws KeyException, IOException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not load the key" );
-		ivExpectedException.expectCause( instanceOf( IOException.class ) );
 
-		final InputStream stream = mock(InputStream.class);
-		when( stream.read(any( ) ) ).thenThrow( IOException.class );
-		KeyUtil.loadPrivateKeyFromStream(  stream );
+		final InputStream stream = mock( InputStream.class );
+		when( stream.read( any( ) ) ).thenThrow( IOException.class );
+
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.loadPrivateKeyFromStream( stream ) )
+				.withCauseInstanceOf( IOException.class )
+				.withMessage( "Could not load the key" );
 	}
 
 	@Test
 	public void testLoadPublicKeyFromStreamWithInvalidStream( ) throws KeyException, IOException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not load the key" );
-		ivExpectedException.expectCause( instanceOf( IOException.class ) );
+		final InputStream stream = mock( InputStream.class );
+		when( stream.read( any( ) ) ).thenThrow( IOException.class );
 
-		final InputStream stream = mock(InputStream.class);
-		when( stream.read(any( ) ) ).thenThrow( IOException.class );
-		KeyUtil.loadPublicKeyFromStream( stream );
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.loadPublicKeyFromStream( stream ) )
+				.withCauseInstanceOf( IOException.class )
+				.withMessage( "Could not load the key" );
 	}
 
 	@Test
 	public void testSavePublicKeyWithInvalidFile( ) throws KeyException, IOException {
-		ivExpectedException.expect( KeyException.class );
-		ivExpectedException.expectMessage( "Could not save the key" );
-		ivExpectedException.expectCause( instanceOf( IOException.class ) );
-
 		final KeyPair keyPair = KeyUtil.generateNewKeyPair( );
 		final PublicKey originalPublicKey = keyPair.getPublic( );
-		KeyUtil.saveKeyToFile( originalPublicKey, new File( "" ) );
+
+		assertThatExceptionOfType( KeyException.class )
+				.isThrownBy( ( ) -> KeyUtil.saveKeyToFile( originalPublicKey, new File( "" ) ) )
+				.withCauseInstanceOf( IOException.class )
+				.withMessage( "Could not save the key" );
 	}
 
 	@Test
@@ -312,9 +305,9 @@ public final class KeyUtilTest {
 		final Constructor<KeyUtil> constructor = KeyUtil.class.getDeclaredConstructor( );
 		constructor.setAccessible( true );
 
-		ivExpectedException.expect( InvocationTargetException.class );
-		ivExpectedException.expectCause( instanceOf( AssertionError.class ) );
-		constructor.newInstance( );
+		assertThatExceptionOfType( InvocationTargetException.class )
+				.isThrownBy( constructor::newInstance )
+				.withCauseInstanceOf( AssertionError.class );
 	}
 
 	private InputStream loadResourceAsStream( final String aResourceName ) {
